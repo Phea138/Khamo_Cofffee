@@ -1,0 +1,529 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+/* ===== TOP NAVBAR ===== */
+.topbar {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding: 8px 12px;
+    gap: 12px;
+    height: 58px;
+    flex-shrink: 0;
+    z-index: 100;
+}
+
+.back a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+}
+
+.back img { width: 20px; height: 20px; }
+
+.table-label {
+    font-weight: bold;
+    font-size: 16px;
+    background: #e3f2fd;
+    padding: 6px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.category {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+    flex-wrap: nowrap;
+}
+
+.category button {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    min-height: 40px;
+    white-space: nowrap;
+}
+
+.category button:hover  { background-color: #43A047; }
+.category button:active { background-color: #388E3C; }
+
+/* ===== MAIN CONTAINER ===== */
+.container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ===== LEFT SECTION ===== */
+section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: #f9f9f9;
+    border-right: 1px solid #ccc;
+    overflow: hidden;
+}
+
+.item-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+table { width: 100%; border-collapse: collapse; }
+
+table thead tr th {
+    padding: 12px 10px;
+    background: #e8e8e8;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    text-align: center;
+}
+
+table thead tr th:first-child { text-align: left; }
+
+table tbody tr td {
+    padding: 12px 10px;
+    font-size: 13px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+table tbody tr td:first-child { text-align: left; }
+table tbody tr:hover           { background-color: #f0f8ff; }
+table tbody tr td img          { width: 20px; height: 20px; cursor: pointer; }
+
+/* ===== RIGHT SECTION ===== */
+aside {
+    width: 42%;
+    display: flex;
+    flex-direction: column;
+    background: #f5f5f5;
+    overflow-y: auto;
+}
+
+.item {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
+    padding: 15px;
+    align-content: start;
+}
+
+.item button {
+    padding: 10px 6px;
+    border: none;
+    border-radius: 12px;
+    background: #66BB6A;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 65px;
+    word-wrap: break-word;
+}
+
+.item button:hover  { background-color: #57A65B; }
+.item button:active { background-color: #43A047; }
+
+/* ===== FOOTER ===== */
+footer {
+    background: #f0f0f0;
+    border-top: 2px solid #ddd;
+    display: flex;
+    align-items: stretch;
+    flex-shrink: 0;
+    min-height: 200px;
+    max-height: 260px;
+}
+
+/* ===== TOTALS ===== */
+.total-amount {
+    flex: 1;
+    min-width: 220px;
+    padding: 12px 16px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+}
+
+.total-amount table { width: 100%; }
+
+.total-amount table tr td {
+    padding: 4px 8px;
+    font-size: 14px;
+    line-height: 1.8;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.total-amount table tr:last-child td { border-bottom: none; }
+
+.total-amount table tr td:first-child {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.total-amount table tr td:last-child {
+    text-align: right;
+    color: #333;
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 0 8px;
+    font-family: Cambria, Georgia, serif;
+}
+
+/* ===== PAYMENT METHOD ===== */
+.payment {
+    flex: 1;
+    min-width: 220px;
+    padding: 8px 16px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-setting {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    flex: 1;
+    padding-bottom: 8px;
+}
+
+.payment-setting button {
+    border: 1px solid #ccc;
+    border-radius: 14px;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+}
+
+.payment-setting button:hover  { background: #e8f5e9; border-color: #66BB6A; }
+.payment-setting button:active { background: #c8e6c9; }
+
+/* Main label on payment buttons */
+.btn-main-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Sub label shows the entered amount */
+.btn-sub-label {
+    font-size: 12px;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+/* ABA buttons keep anchor styling */
+.payment-setting button a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #333;
+    padding: 12px 8px;
+    font-size: 14px;
+}
+
+/* ===== SETTING ===== */
+.setting {
+    flex: 1;
+    min-width: 220px;
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-setting {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    flex: 1;
+    padding-bottom: 8px;
+}
+
+.button-setting button {
+    border: 1px solid #ccc;
+    border-radius: 14px;
+    background: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.2s;
+    padding: 0;
+}
+
+.button-setting button:hover  { background: #e8f5e9; border-color: #66BB6A; }
+.button-setting button:active { background: #c8e6c9; }
+
+.button-setting a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #333;
+    padding: 10px 6px;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ============================================================
+   TABLE KEYPAD MODAL
+   ============================================================ */
+.keypad {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.keypad-box {
+    width: 300px;
+    background: beige;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.display {
+    height: 45px;
+    font-size: 22px;
+    text-align: right;
+    margin-bottom: 10px;
+    padding: 5px;
+    background: white;
+    border-radius: 6px;
+}
+
+.keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.cancelled-row{
+    text-decoration: line-through;
+    color: red;
+    opacity: 0.7;
+}
+
+.key {
+    height: 52px;
+    background: orangered;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.key.del { background: #444; }
+
+.actions { display: flex; gap: 10px; margin-top: 10px; }
+
+.actions button {
+    flex: 1;
+    height: 42px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.actions button#cancel { background: #e53935; }
+
+/* ============================================================
+   PAYMENT SUMMARY MODAL  –  matches your screenshot exactly
+   ============================================================ */
+.summary-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: none;             /* shown via JS */
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+/* White card */
+.summary-box {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 520px;
+    max-width: 92vw;
+    padding: 36px 40px 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.22);
+}
+
+/* Each label + value row */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 0;
+}
+
+.summary-label {
+    font-size: 20px;
+    color: #222;
+}
+
+.summary-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #111;
+}
+
+.summary-value.green { color: #27ae60; }
+
+/* Thin divider between rows */
+.summary-divider {
+    border: none;
+    border-top: 1px solid #e8e8e8;
+    margin: 0;
+}
+
+/* Confirm / Cancel buttons – full width, green style from screenshot */
+.summary-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: 32px;
+}
+
+.sum-confirm,
+.sum-cancel {
+    flex: 1;
+    height: 56px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.sum-confirm {
+    background: #4CAF50;
+    color: white;
+}
+
+/* insert row comment slyle */
+.selected-row {
+    outline: 2px solid #1ed760;
+}
+.comment-text {
+    font-size: 12px;
+    color: #555;
+    margin-top: 3px;
+}
+
+.sum-confirm:hover  { background: #43A047; }
+.sum-confirm:active { background: #388E3C; }
+
+.sum-cancel {
+    background: #4CAF50;   /* same green as screenshot */
+    color: white;
+}
+
+.sum-cancel:hover  { background: #43A047; }
+.sum-cancel:active { background: #388E3C; }
+
+/* ===== TABLET ===== */
+@media screen and (max-width: 1024px) {
+    aside { width: 48%; }
+    .category button { padding: 7px 12px; font-size: 13px; }
+    .item { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+    .total-amount table tr td { font-size: 13px; }
+}
+
+/* ===== MOBILE ===== */
+@media screen and (max-width: 768px) {
+    .topbar { flex-wrap: wrap; height: auto; padding: 8px 10px; gap: 8px; }
+    .category { width: 100%; margin-left: 0; overflow-x: auto; flex-wrap: nowrap; }
+    .category button { padding: 6px 10px; font-size: 12px; min-height: 36px; }
+    .container { flex-direction: column; }
+    section { flex: none; height: 45vh; border-right: none; border-bottom: 2px solid #ddd; }
+    aside   { width: 100%; flex: none; height: 45vh; }
+    footer  { flex-direction: column; max-height: none; overflow-y: auto; }
+    .total-amount, .payment, .setting { border-right: none; border-bottom: 1px solid #ddd; }
+    .total-amount table tr td { font-size: 12px; padding: 3px 6px; }
+    table thead tr th:nth-child(5),
+    table tbody tr td:nth-child(5) { display: none; }
+
+    .summary-box { padding: 24px 20px 20px; }
+    .summary-label, .summary-value { font-size: 16px; }
+    .sum-confirm, .sum-cancel { height: 48px; font-size: 16px; }
+}
+
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .container { flex-direction: row; }
+    section { width: 55%; height: 100%; border-right: 2px solid #ddd; border-bottom: none; }
+    aside   { width: 45%; height: 100%; }
+}
+
+@media screen and (max-width: 480px) {
+    section { height: 40vh; }
+    aside   { height: 50vh; }
+    .item   { grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px; }
+    .item button { min-height: 55px; font-size: 11px; }
+    .total-amount table tr td { font-size: 11px; padding: 2px 4px; }
+    .category button { padding: 5px 8px; font-size: 11px; }
+}

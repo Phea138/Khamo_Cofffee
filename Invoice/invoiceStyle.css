@@ -1,0 +1,200 @@
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            font-size: 13px;
+        }
+
+        /* ── Wrapper ── */
+        .receipt {
+            width: 380px;
+            margin: 0 auto;
+            padding: 24px 28px 32px;
+        }
+
+        /* ── Header ── */
+
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .header .invoice-kh {
+            font-size: 17px;
+            margin-top: 4px;
+
+        }
+
+        /* ── Info block ── */
+
+        .info {
+            margin-top: 18px;
+            line-height: 2;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info p {
+            font-size: 13px;
+        }
+
+        .info .date-time {
+            display: flex;
+            justify-content:  space-between;
+            margin-top: 4px;
+        }
+
+        /* ── Section title ── */
+
+        .section-title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: normal;
+            margin: 22px 0 10px;
+        }
+
+        /* ── Item Table ── */
+
+        .item-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .item-table thead tr {
+            border-top: 1.5px solid #000;
+            border-bottom: 1.5px solid #000;
+        }
+
+        .item-table thead th {
+            padding: 6px 4px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .item-table thead th:nth-child(2),
+        .item-table thead th:nth-child(3),
+        .item-table thead th:nth-child(4),
+        .item-table thead th:nth-child(5) {
+            text-align: center;
+        }
+
+        .item-table tbody tr {
+            border-bottom: 0.5px solid #ccc;
+        }
+
+        .item-table tbody td {
+            padding: 6px 4px;
+            text-align: left;
+        }
+
+        .item-table tbody td:nth-child(2),
+        .item-table tbody td:nth-child(3),
+        .item-table tbody td:nth-child(4),
+        .item-table tbody td:nth-child(5) {
+            text-align: center;
+        }
+
+        .item-table tfoot tr {
+            border-top: 1.5px solid #000;
+        }
+
+        /* ── Totals ── */
+
+         .totals {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 4px;
+        }
+
+        .totals-row.exchange {
+            color: #444;
+            font-size: 12px;
+        }
+
+        /* ── Payment Method ── */
+
+        .payment-section {
+            margin-top: 14px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 13px;
+        }
+
+         .payment-section .pay-label {
+            font-weight: bold;
+            white-space: nowrap;
+            margin-right: 8px;
+        }
+
+        .payment-section .pay-method {
+            flex: 1;
+            text-align: left;
+        }
+
+        .payment-section .pay-amount {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* ── Footer ── */
+
+        .footer {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .footer .thank-you {
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* ── Print button (hidden on print) ── */
+
+        .print-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 40px;
+            background: #4CAF50;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .print-btn:hover { background: #43A047; }
+
+        @media print {
+            .print-btn { display: none; }
+            body { background: #fff; }
+        }

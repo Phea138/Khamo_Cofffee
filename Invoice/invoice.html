@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt - Coffee Shop</title>
+    <link rel="stylesheet" href="/Khamo POS/Invoice/invoiceStyle.css">
+</head>
+<body>
+    <div class="receipt" id="receiptContent">
+
+        <!-- ===== HEADER ===== -->
+
+        <div class="header">
+            <h1>COFFEE SHOP</h1>
+            <div class="invoice-Kh">វិក្កយបិត្រ/Invoice</div>
+        </div>
+
+        <!-- ===== INFO ===== -->
+
+        <div class="info">
+            <p>Invoice ID &nbsp;&nbsp; :  <span id="invoiceID"></span></p>
+            <p>Table Number: <span id="tableNumber"></span></p>
+            <!-- <p>Order Type &nbsp;&nbsp; : Dince in/Takeaway</p> -->
+             <p>Order Type &nbsp;&nbsp; :
+             <span id="orderTypeDisplay"></span>
+             </p>
+            <div class="date-time">
+                <span id="orderDate"></span>
+                <span id="orderTime"></span>
+            </div>
+        </div>
+
+        <!-- ===== SUMMARY ORDER ===== -->
+
+        <p class="section-title">Summary Order</p>
+
+        <table class="item-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>QTY</th>
+                    <th>Unit Price</th>
+                    <th>Discount</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="receiptItems">
+                <!-- filled by JS -->
+            </tbody>
+        </table>
+
+        <!-- ===== TOTALS ===== -->
+
+        <div class="totals">
+            <div class="totals-row">
+                <span>Grand Total ($)</span>
+                <span id="grandTotalUSD"></span>
+            </div>
+            <div class="totals-row">
+                <span>Grand Toltal (R)</span>
+                <span id="grandTotalKH"></span>
+            </div>
+            <div class="totals-row exchange">
+                <span>Exchange Rate:</span>
+                <span>1$=4,000R</span>
+            </div>
+        </div>
+
+        <!-- ===== PAYMENT METHOD ===== -->
+
+        <div class="payment-section">
+            <span class="pay-label">Payment Method</span>
+            <span class="pay-method" id="payMethod"></span>
+            <span class="pay-amount" id="payAmount"></span>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+
+        <div class="footer">
+        <p>Location: No.12, St213, Koh Norea Village, Niroth</p>
+        <p>Commune, Chbar Ampov District, Phnom Penh</p>
+        <br>
+        <p>Coffee Shop</p>
+        <p>Wi-Fi: 12345678</p>
+        <p class="thank-you">Thanks You!</p>
+    </div>
+    </div>
+    <!-- Print button -->
+
+    <button class="print-btn" onclick="window.print()">🖨 Print Receipt</button>
+    <script src="/Khamo POS/Invoice/invoiceScript.js"></script>
+</body>
+</html>

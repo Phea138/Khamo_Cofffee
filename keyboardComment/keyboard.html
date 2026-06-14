@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment Keyboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        /* ── Outer wrap ── */
+        .kb-wrap {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(160deg, #1a1108 0%, #2e1e0f 50%, #1a1108 100%);
+            display: flex;
+            flex-direction: column;
+            padding: 14px 16px 12px;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* subtle grain overlay */
+        .kb-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Display row ── */
+        .kb-display-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kb-display {
+            flex: 1;
+            background: rgba(253,240,216,0.07);
+            border: 1.5px solid rgba(184,130,26,0.35);
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-family: 'DM Mono', monospace;
+            color: #fdf0d8;
+            outline: none;
+            letter-spacing: 0.3px;
+            transition: border-color .2s, background .2s;
+            caret-color: #d4a030;
+        }
+
+        .kb-display:focus {
+            border-color: #b8821a;
+            background: rgba(253,240,216,0.11);
+            box-shadow: 0 0 0 3px rgba(184,130,26,0.12);
+        }
+
+        .kb-display::placeholder {
+            color: rgba(253,240,216,0.28);
+            font-style: italic;
+        }
+
+        /* ── Divider label ── */
+        .kb-label {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(253,240,216,0.22);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Key rows ── */
+        .kb-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kb-row {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        /* ── Base key ── */
+        .key {
+            height: 42px;
+            min-width: 38px;
+            flex: 1;
+            max-width: 54px;
+            background: rgba(253,240,216,0.06);
+            border: 1px solid rgba(184,130,26,0.20);
+            border-radius: 9px;
+            color: #fdf0d8;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'DM Mono', monospace;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            transition: background .12s, border-color .12s, transform .08s, box-shadow .12s;
+            position: relative;
+            /* subtle bottom shadow for depth */
+            box-shadow: 0 2px 0 rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+
+        .key:hover {
+            background: rgba(184,130,26,0.22);
+            border-color: rgba(184,130,26,0.55);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .key:active {
+            transform: translateY(1px);
+            background: rgba(184,130,26,0.32);
+            border-color: #b8821a;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.4);
+        }
+
+        /* Caps on state */
+        .key.caps-on {
+            background: rgba(184,130,26,0.28);
+            border-color: #b8821a;
+            color: #d4a030;
+            box-shadow: 0 0 10px rgba(184,130,26,0.25), 0 2px 0 rgba(0,0,0,0.35);
+        }
+
+        /* ── Number row — slightly lighter ── */
+        .key-num {
+            background: rgba(253,240,216,0.09);
+            border-color: rgba(184,130,26,0.25);
+            font-weight: 600;
+            color: #e8c98a;
+        }
+        .key-num:hover {
+            background: rgba(212,160,48,0.22);
+            border-color: rgba(212,160,48,0.55);
+            color: #fdf0d8;
+        }
+
+        /* ── Backspace — warm red tint ── */
+        .key-backspace {
+            max-width: 88px;
+            flex: 2;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: Arial, sans-serif;
+            background: rgba(192,57,43,0.15);
+            border-color: rgba(192,57,43,0.30);
+            color: #e07060;
+            letter-spacing: 0.3px;
+        }
+        .key-backspace:hover {
+            background: rgba(192,57,43,0.28);
+            border-color: rgba(192,57,43,0.55);
+            color: #fdf0d8;
+        }
+
+        /* ── Enter — green tint ── */
+        .key-enter {
+            max-width: 88px;
+            flex: 2;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: Arial, sans-serif;
+            background: rgba(39,174,96,0.15);
+            border-color: rgba(39,174,96,0.28);
+            color: #5dbb80;
+        }
+        .key-enter:hover {
+            background: rgba(39,174,96,0.26);
+            border-color: rgba(39,174,96,0.5);
+            color: #fdf0d8;
+        }
+
+        /* ── Caps Lock ── */
+        .key-caps {
+            max-width: 88px;
+            flex: 2;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: Arial, sans-serif;
+            letter-spacing: 0.2px;
+        }
+
+        /* ── Space ── */
+        .key-space {
+            max-width: 320px;
+            flex: 6;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(253,240,216,0.55);
+        }
+        .key-space:hover { color: #fdf0d8; }
+
+        /* ── OK ── coffee gold button ── */
+        .key-ok {
+            max-width: 82px;
+            flex: 1.5;
+            background: linear-gradient(135deg, #b8821a, #d4a030);
+            border-color: #d4a030;
+            color: #1a1108;
+            font-weight: 800;
+            font-size: 14px;
+            font-family: 'Playfair Display', Georgia, serif;
+            box-shadow: 0 3px 12px rgba(184,130,26,0.40), 0 2px 0 rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+        .key-ok:hover {
+            background: linear-gradient(135deg, #c99420, #e0b038);
+            border-color: #e0b038;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(184,130,26,0.50), 0 3px 0 rgba(0,0,0,0.25);
+        }
+        .key-ok:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 6px rgba(184,130,26,0.35);
+        }
+
+        /* ── Cancel ── */
+        .key-cancel {
+            max-width: 82px;
+            flex: 1.5;
+            background: rgba(192,57,43,0.14);
+            border-color: rgba(192,57,43,0.28);
+            color: #e07060;
+            font-weight: 700;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+        }
+        .key-cancel:hover {
+            background: rgba(192,57,43,0.26);
+            border-color: rgba(192,57,43,0.5);
+            color: #fdf0d8;
+        }
+
+        /* ── Ripple on click ── */
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
+        }
+        .key .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            width: 10px; height: 10px;
+            transform: scale(0);
+            animation: ripple 0.4s ease-out;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="kb-wrap">
+
+    <!-- Display input -->
+    <div class="kb-display-row">
+        <input class="kb-display" id="display" type="text"
+               placeholder="Type comment here…" autocomplete="off">
+    </div>
+
+    <div class="kb-label">⌨ &nbsp; keyboard</div>
+
+    <!-- Key rows -->
+    <div class="kb-rows">
+
+        <!-- Numbers -->
+        <div class="kb-row">
+            <div class="key key-num">1</div>
+            <div class="key key-num">2</div>
+            <div class="key key-num">3</div>
+            <div class="key key-num">4</div>
+            <div class="key key-num">5</div>
+            <div class="key key-num">6</div>
+            <div class="key key-num">7</div>
+            <div class="key key-num">8</div>
+            <div class="key key-num">9</div>
+            <div class="key key-num">0</div>
+            <div class="key key-backspace">⌫ Back</div>
+        </div>
+
+        <!-- QWERTY -->
+        <div class="kb-row">
+            <div class="key">q</div><div class="key">w</div><div class="key">e</div>
+            <div class="key">r</div><div class="key">t</div><div class="key">y</div>
+            <div class="key">u</div><div class="key">i</div><div class="key">o</div>
+            <div class="key">p</div>
+            <div class="key key-enter">↵ Enter</div>
+        </div>
+
+        <!-- ASDF -->
+        <div class="kb-row">
+            <div class="key key-caps" id="capsKey">⇪ Caps</div>
+            <div class="key">a</div><div class="key">s</div><div class="key">d</div>
+            <div class="key">f</div><div class="key">g</div><div class="key">h</div>
+            <div class="key">j</div><div class="key">k</div><div class="key">l</div>
+            <div class="key">;</div>
+        </div>
+
+        <!-- ZXCV -->
+        <div class="kb-row">
+            <div class="key">z</div><div class="key">x</div><div class="key">c</div>
+            <div class="key">v</div><div class="key">b</div><div class="key">n</div>
+            <div class="key">m</div><div class="key">,</div><div class="key">.</div>
+            <div class="key">?</div>
+        </div>
+
+        <!-- Bottom row -->
+        <div class="kb-row">
+            <div class="key key-ok">OK</div>
+            <div class="key key-space">· · · space · · ·</div>
+            <div class="key key-cancel">✕ Cancel</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById("display");
+    const capsKey  = document.getElementById("capsKey");
+    let capsLock   = false;
+
+    /* ── Ripple helper ── */
+    function addRipple(el, e) {
+        const r    = document.createElement("span");
+        r.className = "ripple";
+        const rect = el.getBoundingClientRect();
+        r.style.left = (e.clientX - rect.left - 5) + "px";
+        r.style.top  = (e.clientY - rect.top  - 5) + "px";
+        el.appendChild(r);
+        setTimeout(() => r.remove(), 420);
+    }
+
+    /* ── Letter keys array for caps toggle ── */
+    const letterKeys = Array.from(
+        document.querySelectorAll(".key:not(.key-num):not(.key-backspace):not(.key-enter):not(.key-caps):not(.key-space):not(.key-ok):not(.key-cancel)")
+    ).filter(k => {
+        const t = k.innerText.trim();
+        return t.length === 1 && /[a-z;,.?]/i.test(t);
+    });
+
+    document.querySelectorAll(".key").forEach(key => {
+        key.addEventListener("click", (e) => {
+            addRipple(key, e);
+            const val = key.innerText.trim();
+
+            if (key.classList.contains("key-backspace")) {
+                display.value = display.value.slice(0, -1);
+
+            } else if (key.classList.contains("key-space")) {
+                display.value += " ";
+
+            } else if (key.classList.contains("key-enter")) {
+                display.value += "\n";
+
+            } else if (key.classList.contains("key-caps")) {
+                capsLock = !capsLock;
+                capsKey.classList.toggle("caps-on", capsLock);
+                letterKeys.forEach(k => {
+                    const t = k.innerText.trim();
+                    if (/[a-z]/i.test(t)) {
+                        k.innerText = capsLock ? t.toUpperCase() : t.toLowerCase();
+                    }
+                });
+
+            } else if (key.classList.contains("key-ok")) {
+                submitComment();
+
+            } else if (key.classList.contains("key-cancel")) {
+                display.value = "";
+                window.parent.postMessage({ type: "CLOSE_COMMENT" }, "*");
+
+            } else {
+                /* single character */
+                if (val.length === 1) {
+                    display.value += capsLock ? val.toUpperCase() : val.toLowerCase();
+                }
+            }
+        });
+    });
+
+    function submitComment() {
+        const text = display.value.trim();
+        window.parent.postMessage({ type: "COMMENT", text: text }, "*");
+        display.value = "";
+    }
+</script>
+</body>
+</html>

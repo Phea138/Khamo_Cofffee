@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="NavbarStyle.css">
+    <style>
+        .content{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .feature1,.feature2{
+            background-color: rgb(229, 204, 255);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .feature1:hover,.feature2:hover{
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            background-color: rgb(218, 185, 255);
+        }
+        .feature1 h3 ,.feature2 h3{
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif ;
+            padding: 10px;
+            margin: 0;
+        }
+        .feature1 p,.feature2 p{
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .feature1 button,.feature2 button{
+            padding: 10px 20px;
+            background-color: rgb(168, 160, 160);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .feature1 button:hover,.feature2 button:hover{
+            background-color: rgb(140, 130, 130);
+            transform: scale(1.05);
+        }
+        
+        /* Tablet (768px and below) */
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                padding: 15px;
+            }
+            .feature1, .feature2{
+                padding: 15px;
+                min-height: 180px;
+            }
+        }
+        
+        /* Mobile (480px and below) */
+        @media (max-width: 480px) {
+            .content {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 10px;
+            }
+            .feature1, .feature2 {
+                padding: 15px;
+                min-height: auto;
+            }
+            .feature1 h3, .feature2 h3 {
+                font-size: 18px;
+            }
+            .feature1 p, .feature2 p {
+                font-size: 14px;
+            }
+            .feature1 button, .feature2 button {
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/Khamo POS/POS_SYSTEM/Navbar/DineIn.html" class="active"><img
+                        src="/Khamo POS/POS_SYSTEM/img/restaurant_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"> Dine in</a></li>
+            <li><a href="/Khamo POS/POS_SYSTEM/Navbar/TakeAway.html"><img
+                        src="/Khamo POS/POS_SYSTEM/img/local_mall_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"> Take Away</a></li>
+            <li><a href="/Khamo POS/POS_SYSTEM/Navbar/TrackingProduct.html"><img
+                        src="/Khamo POS/POS_SYSTEM/img/edit_square_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg"> Tracking Product</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="content">
+        <div class="feature1">
+            <h3>Record Wasted Products</h3>
+            <p>Keep track of products that have been wasted or damaged to manage inventory effectively and reduce losses.</p>
+            <button id="NewWasted" onclick="commingsoon()" >New</button>
+        </div>
+        <div class="feature2">
+            <h3>Products Report</h3>
+            <p>Generate detailed reports on product performance, sales, and inventory levels to make informed business decisions.</p>
+            <button onclick="commingsoon()" >View Report</button>
+        </div>
+    </div>
+<script>
+    function commingsoon(){
+        alert("This feature is coming soon!");
+    }
+</script>
+</body>
+</html>
+<!-- <script>
+    document.getElementById('NewWasted').addEventListener('click', function () {
+        window.location.href = '/Khamo POS/POS_SYSTEM/Navbar/Wasted/Wasted.php';
+    });
+</script> -->

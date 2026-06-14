@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Table Number Input</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #e8e8ec;
+      --surface: #f0f0f4;
+      --surface-raised: #f6f6fa;
+      --shadow-light: #ffffff;
+      --shadow-dark: #c8c8cc;
+      --accent: #3a6cf4;
+      --accent-dark: #2a5be0;
+      --accent-press: #1f4ecb;
+      --text-primary: #1a1a2e;
+      --text-secondary: #6b6b80;
+      --danger: #e05050;
+      --danger-dark: #c73f3f;
+      --ok-bg: #ffffff;
+      --radius: 14px;
+      --btn-radius: 12px;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .numpad-wrapper {
+      background: var(--bg);
+      border-radius: 24px;
+      padding: 24px 20px 20px;
+      width: 320px;
+      box-shadow:
+        8px 8px 20px var(--shadow-dark),
+        -8px -8px 20px var(--shadow-light);
+    }
+
+    /* ── Display ── */
+    .display {
+      background: var(--surface-raised);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      box-shadow:
+        inset 4px 4px 10px var(--shadow-dark),
+        inset -3px -3px 8px var(--shadow-light);
+    }
+
+    .display-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .display-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--text-primary);
+      min-height: 38px;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+    }
+
+    .display-value .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 2px;
+      margin-left: 3px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .display-value.has-value .cursor {
+      display: none;
+    }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Buttons – neumorphic ── */
+    .btn {
+      background: var(--bg);
+      border: none;
+      border-radius: var(--btn-radius);
+      height: 64px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      position: relative;
+      box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+      transition: box-shadow 0.12s ease, transform 0.1s ease, color 0.12s ease;
+      outline: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:hover {
+      color: var(--accent);
+    }
+
+    .btn:active,
+    .btn.pressed {
+      box-shadow:
+        inset 4px 4px 10px var(--shadow-dark),
+        inset -3px -3px 8px var(--shadow-light);
+      transform: scale(0.96);
+      color: var(--accent);
+    }
+
+    /* Del button */
+    .btn-del {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--danger);
+    }
+
+    .btn-del:hover,
+    .btn-del:active,
+    .btn-del.pressed {
+      color: var(--danger-dark);
+    }
+
+    /* ── Action row ── */
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    .btn-ok,
+    .btn-cancel {
+      height: 56px;
+      border-radius: var(--btn-radius);
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: box-shadow 0.12s ease, transform 0.1s ease, background 0.12s ease;
+      outline: none;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-ok {
+      background: var(--accent);
+      color: #fff;
+      box-shadow:
+        5px 5px 12px rgba(58, 108, 244, 0.35),
+        -3px -3px 8px rgba(255,255,255,0.6);
+    }
+
+    .btn-ok:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-ok:active,
+    .btn-ok.pressed {
+      background: var(--accent-press);
+      box-shadow:
+        inset 3px 3px 8px rgba(0,0,0,0.25),
+        inset -2px -2px 6px rgba(255,255,255,0.1);
+      transform: scale(0.96);
+    }
+
+    .btn-cancel {
+      background: var(--bg);
+      color: var(--text-secondary);
+      box-shadow:
+        5px 5px 12px var(--shadow-dark),
+        -5px -5px 12px var(--shadow-light);
+    }
+
+    .btn-cancel:hover {
+      color: var(--text-primary);
+    }
+
+    .btn-cancel:active,
+    .btn-cancel.pressed {
+      box-shadow:
+        inset 4px 4px 10px var(--shadow-dark),
+        inset -3px -3px 8px var(--shadow-light);
+      transform: scale(0.96);
+    }
+
+    /* ── Flash on OK ── */
+    .display.flash {
+      animation: flashAnim 0.3s ease;
+    }
+
+    @keyframes flashAnim {
+      0%   { background: var(--surface-raised); }
+      40%  { background: rgba(58,108,244,0.15); }
+      100% { background: var(--surface-raised); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="numpad-wrapper">
+
+    <div class="display" id="display">
+      <div class="display-label">Input Table Number</div>
+      <div class="display-value" id="displayValue">
+        <span class="cursor"></span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <button class="btn" data-val="1">1</button>
+      <button class="btn" data-val="2">2</button>
+      <button class="btn" data-val="3">3</button>
+
+      <button class="btn" data-val="4">4</button> 
+      <button class="btn" data-val="5">5</button>
+      <button class="btn" data-val="6">6</button>
+
+      <button class="btn" data-val="7">7</button>
+      <button class="btn" data-val="8">8</button>
+      <button class="btn" data-val="9">9</button>
+
+      <button class="btn" data-val=".">.</button>
+      <button class="btn" data-val="0">0</button>
+      <button class="btn btn-del" data-val="del">Del</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn-ok"     id="btnOk">OK</button>
+      <button class="btn-cancel" id="btnCancel">Cancel</button>
+    </div>
+
+  </div>
+
+  <script>
+    const displayEl    = document.getElementById('display');
+    const displayValue = document.getElementById('displayValue');
+    let value = '';
+
+    function render() {
+      if (value === '') {
+        displayValue.innerHTML = '<span class="cursor"></span>';
+        displayValue.classList.remove('has-value');
+      } else {
+        displayValue.textContent = value;
+        displayValue.classList.add('has-value');
+      }
+    }
+
+    function pressEffect(btn) {
+      btn.classList.add('pressed');
+      setTimeout(() => btn.classList.remove('pressed'), 150);
+    }
+
+    // Digit / dot / del buttons
+    document.querySelectorAll('.btn[data-val]').forEach(btn => {
+      btn.addEventListener('pointerdown', () => {
+        pressEffect(btn);
+        const v = btn.dataset.val;
+
+        if (v === 'del') {
+          value = value.slice(0, -1);
+        } else if (v === '.') {
+          if (!value.includes('.')) value += v;
+        } else {
+          if (value.length < 6) value += v;
+        }
+        render();
+      });
+    });
+
+    // OK
+    document.getElementById('btnOk').addEventListener('pointerdown', function() {
+      pressEffect(this);
+      if (value !== '') {
+        displayEl.classList.remove('flash');
+        void displayEl.offsetWidth; // reflow to restart animation
+        displayEl.classList.add('flash');
+        // In a real app: submit the value here
+        console.log('Table number submitted:', value);
+      }
+    });
+
+    // Cancel
+    document.getElementById('btnCancel').addEventListener('pointerdown', function() {
+      pressEffect(this);
+      value = '';
+      render();
+    });
+
+    // Keyboard support
+    document.addEventListener('keydown', e => {
+      if ((e.key >= '0' && e.key <= '9') || e.key === '.') {
+        const fakeBtn = document.querySelector(`.btn[data-val="${e.key}"]`);
+        if (fakeBtn) { pressEffect(fakeBtn); }
+        if (e.key === '.' && !value.includes('.')) value += e.key;
+        else if (e.key !== '.' && value.length < 6) value += e.key;
+        render();
+      } else if (e.key === 'Backspace') {
+        const fakeBtn = document.querySelector('.btn-del');
+        if (fakeBtn) pressEffect(fakeBtn);
+        value = value.slice(0, -1);
+        render();
+      } else if (e.key === 'Enter') {
+        document.getElementById('btnOk').dispatchEvent(new Event('pointerdown'));
+      } else if (e.key === 'Escape') {
+        document.getElementById('btnCancel').dispatchEvent(new Event('pointerdown'));
+      }
+    });
+
+    render();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<style>
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body{
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* LOGIN CARD */
+form{
+    height: 72vh;
+    width: 90%;
+    max-width: 360px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+/* INPUT SECTIONS */
+.Shop_ID,
+.password{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label{
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+}
+
+.password input,
+.Shop_ID input{
+    height: 42px;
+    font-size: 18px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: 0.2s;
+}
+
+.password input:focus,
+.Shop_ID input:focus{
+    border-color: #e49622;
+    box-shadow: 0 0 5px rgba(228,150,34,0.5);
+}
+
+/* NUMBER PAD */
+.num-password{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.number{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    flex-grow: 1;
+}
+
+/* KEYPAD BUTTONS */
+.number p{
+    background: #e49622;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.number p:hover{
+    background: #cf7f15;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.number p:active{
+    transform: scale(0.95);
+}
+
+/* DELETE BUTTON */
+#delete{
+    background: #dc3545;
+}
+
+#delete:hover{
+    background: #b02a37;
+}
+
+/* ACTION BUTTONS */
+.button{
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.button button{
+    flex: 1;
+    height: 45px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+    font-weight: bold;
+}
+
+/* OK BUTTON */
+#confirm{
+    background: #28a745;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+#confirm:hover{
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+/* CANCEL BUTTON */
+#cancel{
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+#cancel:hover{
+    background: #b02a37;
+    transform: translateY(-2px);
+}
+</style>
+</head>
+
+<body>
+
+<form>
+    <div class="Shop_ID">
+        <label>Shop ID</label>
+        <input type="text" id="shop_id" inputmode="decimal" readonly>
+    </div>
+
+    <div class="password">
+        <label>Password</label>
+        <input type="password" id="password" inputmode="decimal" readonly>
+    </div>
+
+    <div class="num-password">
+        <div class="number">
+            <p>1</p><p>2</p><p>3</p>
+            <p>4</p><p>5</p><p>6</p>
+            <p>7</p><p>8</p><p>9</p>
+            <p>.</p><p>0</p><p id="delete">Del</p>
+        </div>
+
+        <div class="button">
+            <button type="button" id="confirm">OK</button>
+            <button type="button" id="cancel">Cancel</button>
+        </div>
+    </div>
+</form>
+
+<script>
+
+let currentInput = null;
+
+const shopInput = document.getElementById('shop_id');
+const passInput = document.getElementById('password');
+
+/* detect which field is active */
+shopInput.addEventListener("click", () => currentInput = shopInput);
+passInput.addEventListener("click", () => currentInput = passInput);
+
+/* keypad buttons */
+document.querySelectorAll('.number p').forEach(btn => {
+
+    btn.addEventListener('click', () => {
+
+        if(!currentInput) return;
+
+        if(btn.id === 'delete'){
+            currentInput.value = currentInput.value.slice(0,-1);
+        }
+        else{
+            currentInput.value += btn.innerText;
+        }
+
+    });
+
+});
+
+/* confirm login */
+document.getElementById('confirm').addEventListener('click', () => {
+
+    if(shopInput.value === "1234" && passInput.value === "1234"){
+        window.location.href="/Khamo POS/POS_SYSTEM/Navbar/Dinein.html";
+    }
+    else{
+        alert("Wrong Shop ID or Password!");
+        shopInput.value = "";
+        passInput.value = "";
+    }
+
+});
+
+function setActive(input){
+    shopInput.classList.remove("active");
+    passInput.classList.remove("active");
+
+    input.classList.add("active");
+    currentInput = input;
+}
+
+shopInput.addEventListener("click", () => setActive(shopInput));
+passInput.addEventListener("click", () => setActive(passInput));
+
+// default active
+setActive(shopInput);
+
+/* cancel button */
+document.getElementById('cancel').addEventListener('click', () => {
+
+    shopInput.value = "";
+    passInput.value = "";
+
+});
+
+document.addEventListener('keydown', function(event) {
+    // If no input field is active, do nothing
+    if (!currentInput) return;
+    
+    const key = event.key;
+    
+    // Prevent default behavior for keys we're handling
+    const handledKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'Backspace', 'Enter', 'Escape'];
+    if (handledKeys.includes(key) || key === 'Delete') {
+        event.preventDefault();
+    }
+    
+    // Handle number keys (0-9)
+    if (/^[0-9]$/.test(key)) {
+        currentInput.value += key;
+    }
+    // Handle dot key (.)
+    else if (key === '.') {
+        currentInput.value += '.';
+    }
+    // Handle Backspace (delete last character)
+    else if (key === 'Backspace') {
+        currentInput.value = currentInput.value.slice(0, -1);
+    }
+    // Handle Enter key - trigger OK/login
+    else if (key === 'Enter') {
+        // Trigger the confirm button click
+        document.getElementById('confirm').click();
+    }
+    // Handle Escape key - trigger Cancel/clear
+    else if (key === 'Escape') {
+        // Trigger the cancel button click
+        document.getElementById('cancel').click();
+    }
+    // Handle Delete key (alternative delete)
+    else if (key === 'Delete') {
+        currentInput.value = currentInput.value.slice(0, -1);
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POS Payment</title>
+<link rel="stylesheet" href="style.css">
+<style>
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    height: 100vh;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pos-box{
+    width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+label{
+    font-size: 16px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input{
+    width: 100%;
+    height: 45px;
+    font-size: 22px;
+    text-align: right;
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* ===== KEYPAD MODAL ===== */
+.keypad{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.keypad-box{
+    width: 320px;
+    background: beige;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.display{
+    height: 45px;
+    font-size: 22px;
+    text-align: right;
+    margin-bottom: 10px;
+    padding: 5px;
+    background: white;
+    border-radius: 6px;
+}
+
+.keys{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+}
+
+.key{
+    height: 55px;
+    background: orangered;
+    color: white;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.key.del{
+    background: #444;
+}
+
+.actions{
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.actions button{
+    flex: 1;
+    height: 45px;
+    font-size: 16px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="pos-box">
+    <label>Customer Pay (USD)</label>
+    <input type="text" id="payment" readonly placeholder="0.00">
+</div>
+
+<!-- KEYPAD -->
+<div class="keypad" id="keypad">
+    <div class="keypad-box">
+        <div class="display" id="display">0</div>
+
+        <div class="keys">
+            <div class="key">1</div><div class="key">2</div><div class="key">3</div>
+            <div class="key">4</div><div class="key">5</div><div class="key">6</div>
+            <div class="key">7</div><div class="key">8</div><div class="key">9</div>
+            <div class="key">.</div><div class="key">0</div><div class="key del">Del</div>
+        </div>
+
+        <div class="actions">
+            <button id="ok">OK</button>
+            <button id="cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const paymentInput = document.getElementById('payment');
+const keypad = document.getElementById('keypad');
+const display = document.getElementById('display');
+
+paymentInput.addEventListener('click', () => {
+    keypad.style.display = 'flex';
+    display.innerText = paymentInput.value || '0';
+});
+
+document.querySelectorAll('.key').forEach(key => {
+    key.addEventListener('click', () => {
+        let val = key.innerText;
+
+        if(key.classList.contains('del')){
+            display.innerText = display.innerText.slice(0,-1) || '0';
+            return;
+        }
+
+        if(val === '.' && display.innerText.includes('.')) return;
+
+        if(display.innerText === '0' && val !== '.'){
+            display.innerText = val;
+        } else {
+            display.innerText += val;
+        }
+    });
+});
+
+document.getElementById('ok').addEventListener('click', () => {
+    paymentInput.value = display.innerText;
+    keypad.style.display = 'none';
+});
+
+document.getElementById('cancel').addEventListener('click', () => {
+    keypad.style.display = 'none';
+});
+</script>
+
+</body>
+</html>

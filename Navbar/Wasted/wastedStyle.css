@@ -1,0 +1,345 @@
+/* ====================================
+   GLOBAL STYLES
+   ==================================== */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    overflow: hidden;
+}
+
+/* ====================================
+   WRAPPER LAYOUT
+   ==================================== */
+.wastedWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.backButton {
+    padding: 15px 20px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+.backButton a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.backButton img {
+    width: 24px;
+    height: 24px;
+}
+
+/* ====================================
+   MAIN GRID LAYOUT
+   ==================================== */
+.wastedBody {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+    padding: 20px;
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* ====================================
+   SIDEBAR (LEFT COLUMN)
+   ==================================== */
+.wastedBody .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+}
+
+.wastedBody .submit {
+    flex: 0 0 auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    width: 100%;
+    padding: 0;
+}
+
+.wastedBody .submit #submitSummary {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ====================================
+   RIGHTSIDE (RIGHT COLUMN)
+   ==================================== */
+.wastedBody .rightside {
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+}
+
+/* ====================================
+   CONTAINER & PRODUCT LIST
+   ==================================== */
+.container {
+    margin: 0;
+    padding: 20px;
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ====================================
+   HEADINGS
+   ==================================== */
+h2 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+/* ====================================
+   SEARCH PRODUCT
+   ==================================== */
+.searchProduct {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-shrink: 0;
+}
+
+.searchProduct input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.searchProduct button {
+    padding: 12px 20px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.searchProduct button:hover {
+    background: #45a049;
+}
+
+/* ====================================
+   SCROLL LIST & TABLE
+   ==================================== */
+.scroll_list {
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.WastedProduct-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    margin-bottom: 10px;
+}
+
+.WastedProduct-list table {
+    width: 100%;
+}
+
+.scroll_list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scroll_list thead {
+    flex-shrink: 0;
+}
+
+.scroll_list tbody {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.scroll_list th,
+.scroll_list td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+.scroll_list th {
+    background: #4CAF50;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.scroll_list tr:hover {
+    background: #f9f9f9;
+}
+
+/* ====================================
+   RESPONSIVE DESIGN
+   ==================================== */
+/* Large Desktop: 60/40 split (left side bigger) */
+@media (min-width: 1400px) {
+    .wastedBody {
+        grid-template-columns: 1.5fr 1fr;
+        padding: 20px;
+        gap: 20px;
+    }
+}
+
+/* Desktop: 60/40 split */
+@media (min-width: 1024px) and (max-width: 1399px) {
+    .wastedBody {
+        grid-template-columns: 1.5fr 1fr;
+        padding: 16px;
+        gap: 16px;
+    }
+}
+
+/* Tablets: 55/45 split */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .wastedBody {
+        grid-template-columns: 1.3fr 1fr;
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .scroll_list table {
+        font-size: 14px;
+    }
+}
+
+/* Large phones: Stack vertically */
+@media (max-width: 767px) {
+    .wastedBody {
+        grid-template-columns: 1fr;
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .wastedBody .sidebar,
+    .wastedBody .rightside {
+        min-height: 50vh;
+        max-height: 60vh;
+    }
+
+    .scroll_list {
+        max-height: 100%;
+    }
+
+    .WastedProduct-list {
+        max-height: 100%;
+        min-height: 300px;
+    }
+}
+
+/* Small phones: Further optimization */
+@media (max-width: 480px) {
+    .wastedBody {
+        grid-template-columns: 1fr;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .wastedBody .sidebar,
+    .wastedBody .rightside {
+        min-height: 45vh;
+        max-height: 55vh;
+    }
+
+    .scroll_list table {
+        font-size: 13px;
+    }
+
+    .scroll_list th,
+    .scroll_list td {
+        padding: 8px;
+    }
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .searchProduct {
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    .searchProduct input,
+    .searchProduct button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #4CAF50;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+tr:hover {
+    background: #f9f9f9;
+}

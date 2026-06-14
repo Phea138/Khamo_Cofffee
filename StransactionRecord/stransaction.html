@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transaction Record</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<!-- xlsx with cell styling support -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<link rel="stylesheet" href="transactionStyle.css">
+</head>
+<body>
+
+<!-- ═══════════════ SIDEBAR ═══════════════ -->
+<aside class="sb">
+  <div class="sb-top">
+    <a class="back-btn" href="/Khamo POS/POS_SYSTEM/StartOrder/New.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back
+    </a>
+    <div class="sb-brand">
+      <div class="sb-cup">☕</div>
+      <div class="sb-title">Transaction<br>Record</div>
+    </div>
+    <div class="sb-divider"></div>
+  </div>
+
+  <nav class="sb-nav">
+    <button class="nv on" id="nb-paid" onclick="show('paid')">
+      Transaction Paid <span class="np" id="pp">0</span>
+    </button>
+    <button class="nv" id="nb-deleted" onclick="show('deleted')">
+      Transaction Deleted <span class="np" id="pd">0</span>
+    </button>
+    <button class="nv" id="nb-export" onclick="show('export')">
+      Export Sale
+    </button>
+  </nav>
+  <div class="sb-footer">Coffee Shop POS</div>
+</aside>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+
+  <!-- ── PAGE: PAID ── -->
+  <div class="page show" id="pg-paid">
+    <div class="ph">
+      <div class="ph-title">Transaction Paid</div>
+      <div class="ph-line"></div>
+    </div>
+
+    <div class="stats">
+      <div class="sc sg">
+        <div class="sc-label">Total Revenue</div>
+        <div class="sc-val" id="pr">$0.00</div>
+        <div class="sc-stamp">$</div>
+      </div>
+      <div class="sc sb">
+        <div class="sc-label">Total Transaction</div>
+        <div class="sc-val" id="pc">0</div>
+        <div class="sc-stamp">#</div>
+      </div>
+      <div class="sc sgold">
+        <div class="sc-label">Average Transaction</div>
+        <div class="sc-val" id="pa">$0.00</div>
+        <div class="sc-stamp">≈</div>
+      </div>
+    </div>
+
+    <div class="sr-row">
+      <div class="search-wrap">
+        <input type="text" placeholder="Enter Invoice ID…" oninput="filt('pb',this.value)">
+        <button>
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <circle cx="11" cy="11" r="6"/>
+            <path stroke-linecap="round" d="M21 21l-3.5-3.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tbl-outer">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice ID</th>
+              <th>Table Number</th>
+              <th>Date Time</th>
+              <th>Payment Method</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="pb"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: DELETED ── -->
+  <div class="page" id="pg-deleted">
+    <div class="ph">
+      <div class="ph-title">Transaction Deleted</div>
+      <div class="ph-line" style="background:linear-gradient(90deg,var(--red),transparent)"></div>
+    </div>
+
+    <div class="stats">
+      <div class="sc sr">
+        <div class="sc-label">Total Deleted Transactions</div>
+        <div class="sc-val" id="dc">0</div>
+        <div class="sc-stamp">✕</div>
+      </div>
+      <div class="sc sr">
+        <div class="sc-label">Total Amount Lost</div>
+        <div class="sc-val" id="da">$0.00</div>
+        <div class="sc-stamp">$</div>
+      </div>
+    </div>
+
+    <div class="sr-row">
+      <div class="search-wrap">
+        <input type="text" placeholder="Enter Invoice ID…" oninput="filt('db',this.value)">
+        <button>
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <circle cx="11" cy="11" r="6"/>
+            <path stroke-linecap="round" d="M21 21l-3.5-3.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tbl-outer">
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Invoice ID</th>
+              <th>Table Number</th>
+              <th>Date Time</th>
+              <th>Status</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="db"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PAGE: EXPORT ── -->
+  <div class="page" id="pg-export">
+    <div class="ph">
+      <div class="ph-title">Export Sale</div>
+      <div class="ph-line" style="background:linear-gradient(90deg,var(--blue),transparent)"></div>
+    </div>
+
+    <div class="exp-body">
+
+      <!-- LEFT: config card only, no preview -->
+      <div class="exp-left">
+        <div class="exp-card">
+          <h3>Export Configuration</h3>
+
+          <!-- ── Date row ── -->
+          <div class="cfg-label">Select Date</div>
+          <div class="cfg-row">
+            <div class="date-grp">
+              <label>Pick Start Date</label>
+              <input type="date" id="ds" onchange="onRangeChange()">
+            </div>
+            <span class="to-sep">To</span>
+            <div class="date-grp">
+              <label>Pick End Date</label>
+              <input type="date" id="de" onchange="onRangeChange()">
+            </div>
+          </div>
+
+          <!-- ── Time row ── -->
+          <div class="cfg-label" style="margin-top:20px;">Select Time</div>
+          <div class="cfg-row">
+            <div class="date-grp">
+              <label>Start Time</label>
+              <input type="time" id="ts" onchange="onRangeChange()">
+            </div>
+            <span class="to-sep">To</span>
+            <div class="date-grp">
+              <label>End Time</label>
+              <input type="time" id="te" onchange="onRangeChange()">
+            </div>
+          </div>
+
+          <button class="exp-btn" onclick="doExport()">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+            </svg>
+            Export as Excel
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: summary cards -->
+      <div class="exp-right">
+        <div class="sum-card sgold">
+          <div class="s-lbl">Total Amount Paid</div>
+          <div class="s-val" id="etp">$0.00</div>
+          <div class="wm">$</div>
+        </div>
+        <div class="sum-card sb">
+          <div class="s-lbl">Total Transactions</div>
+          <div class="s-val" id="etc">0</div>
+          <div class="wm">#</div>
+        </div>
+        <div class="sum-card sg">
+          <div class="s-lbl">Total Amount Filtered</div>
+          <div class="s-val" id="efa">$0.00</div>
+          <div class="wm">$</div>
+        </div>
+        <div class="sum-card sr">
+          <div class="s-lbl">Total Deleted Transactions</div>
+          <div class="s-val" id="ede">0</div>
+          <div class="wm">✕</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script src="/Khamo POS/POS_SYSTEM/StransactionRecord/stransaction.js"></script>
+</body>
+</html>
