@@ -652,6 +652,7 @@ app.use(express.static(path.join(__dirname, "/..")));
 const TELEGRAM_TOKEN    = "8796925029:AAFUopYfmjn8TYv5JjIhWJrAVPl7I_dooEk";
 const TELEGRAM_CHAT_IDS = [
     "-5183263294",
+    "-5384938866",
 ];
 // ═══════════════════════════════════════
 //  DATABASE
@@ -764,7 +765,8 @@ app.get("/api/invoice-detail/:invoiceID", (req, res) => {
                 ii.price,
                 ii.discount,
                 ii.total,
-                ii.cancelled
+                ii.cancelled,
+                ii.comment 
             FROM invoice_items ii
             JOIN invoices i ON ii.invoice_id = i.id
             WHERE i.invoice_number = ?
@@ -799,22 +801,67 @@ app.post("/api/save-invoice", (req, res) => {
 
         const invoiceId = result.insertId;
 
+        // const itemSql = `
+        //     INSERT INTO invoice_items
+        //         (invoice_id, product_name, size, qty, price, discount, total, cancelled)
+        //     VALUES ?
+        // `;
+
         const itemSql = `
             INSERT INTO invoice_items
-                (invoice_id, product_name, size, qty, price, discount, total, cancelled)
+                (invoice_id, product_name, size, qty, price, discount, total, cancelled, comment)
             VALUES ?
-        `;
+         `;
 
+        // const itemValues = order.items.map(item => [
+        //     invoiceId, item.name, item.size,
+        //     item.qty, item.price, item.discount, item.total,
+        //     item.cancelled ? 1 : 0
+        // ]);
         const itemValues = order.items.map(item => [
-            invoiceId, item.name, item.size,
-            item.qty, item.price, item.discount, item.total,
-            item.cancelled ? 1 : 0
+            invoiceId,
+            item.name,
+            item.size,
+            item.qty,
+            item.price,
+            item.discount,
+            item.total,
+            item.cancelled ? 1 : 0,
+            item.comment || ""   //  SAVE COMMENT
         ]);
 
         db.query(itemSql, [itemValues], (err2) => {
             if (err2) { console.log(err2); return res.status(500).json(err2); }
             res.json({ success: true });
         });
+
+        // INSERT INTO SendToMaker
+    const makerSql = `
+    INSERT INTO SendToMaker
+    (order_type, table_name, product_name, size, qty, comment)
+    VALUES ?
+   `;
+
+   const makerValues = order.items
+    .filter(item => !item.cancelled) // skip cancelled
+     .map(item => [
+        order.orderType,
+        order.table,
+        item.name,
+        item.size,
+        item.qty,
+        item.comment || ""
+    ]);
+
+    if (makerValues.length > 0) {
+    db.query(makerSql, [makerValues], (err3) => {
+        if (err3) {
+            console.log("SendToMaker error:", err3);
+          } else {
+            console.log("✅ Sent to maker table");
+        }
+     });
+  }
     });
 });
 
@@ -826,6 +873,18 @@ app.post("/api/delete-invoice", (req, res) => {
     const sql = `UPDATE invoices SET status = 'DELETED' WHERE invoice_number = ?`;
     db.query(sql, [invoiceID], (err) => {
         if (err) { console.log(err); return res.status(500).json(err); }
+        res.json({ success: true });
+    });
+});
+
+// ═══════════════════════════════════════
+//  RETURN INVOICE
+// ═══════════════════════════════════════
+app.post("/api/return-invoice", (req, res) => {
+    const { invoiceID } = req.body;
+    const sql = `UPDATE invoices SET status = 'RETURNED' WHERE invoice_number = ?`;
+    db.query(sql, [invoiceID], (err) => {
+        if (err) { console.error(err); return res.status(500).json({ success: false }); }
         res.json({ success: true });
     });
 });
@@ -883,16 +942,34 @@ app.post("/api/send-telegram", (req, res) => {
     const totalKH = Math.round(parseFloat(order.totalUSD) * 4000);
 
     let itemLines = "";
+    let commentLines = "";
+
+    // order.items.forEach((item, i) => {
+    //     const disc = parseFloat(item.discount) > 0 ? ` (-${item.discount}%)` : "";
+    //     itemLines += `${i+1}. ${item.name} ${item.size} x${item.qty}  $${parseFloat(item.total).toFixed(2)}${disc}\n`;
+    // });
+
     order.items.forEach((item, i) => {
-        const disc = parseFloat(item.discount) > 0 ? ` (-${item.discount}%)` : "";
-        itemLines += `${i+1}. ${item.name} ${item.size} x${item.qty}  $${parseFloat(item.total).toFixed(2)}${disc}\n`;
-    });
+
+    //  skip cancelled item (optional but recommended)
+    if (item.cancelled) return;
+
+    const disc = parseFloat(item.discount) > 0 ? ` (-${item.discount}%)` : "";
+
+    itemLines += `${i+1}. ${item.name} ${item.size} x${item.qty}  $${parseFloat(item.total).toFixed(2)}${disc}\n`;
+
+    //  ADD COMMENT
+    if (item.comment && item.comment.trim() !== "") {
+    commentLines += `${i+1}. ${item.name} ${item.size} x${item.qty}  $${parseFloat(item.total).toFixed(2)}${disc}\n`;
+    commentLines += `   💬 ${item.comment}\n`;
+}
+});
 
     let payParts = [];
     if (parseFloat(order.paidKH)  > 0) payParts.push(`${parseFloat(order.paidKH).toLocaleString()} ៛`);
     if (parseFloat(order.paidUSD) > 0) payParts.push(`$${parseFloat(order.paidUSD).toFixed(2)}`);
 
-    const message =
+    const messageOrder =
 `☕ Khamo Coffee — NEW ORDER
 ━━━━━━━━━━━━━━━━━━━━
 🪑 Table: ${order.table}
@@ -911,12 +988,104 @@ ${itemLines}
 Address: Areyksat Phnom Penh Cambodia
 WI-FI Password: 011889968
 Thank you!Enjoy your coffee!
-
-
 `;
 
+
+// this one of the message send comment
+let messageComment = null;
+
+if (commentLines.trim() !== "") {
+    messageComment =   
+`☕ COFFEE SHOP — NEW ORDER-comment
+━━━━━━━━━━━━━━━━━━━━
+🪑 Table: ${order.table}
+🆔 Invoice ID: ${order.invoiceID}
+📅 Date: ${p(now.getDate())}-${p(now.getMonth()+1)}-${now.getFullYear()}
+🕐 Time: ${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}
+
+📋 Items:
+${commentLines}`;
+}
+
+    
+    // send for both message in one group
+    const sendToOne = (chatId, text) => new Promise((resolve, reject) => {
+    const body = JSON.stringify({ chat_id: chatId, text });
+
+    const options = {
+        hostname: "api.telegram.org",
+        path: `/bot${TELEGRAM_TOKEN}/sendMessage`,
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Content-Length": Buffer.byteLength(body)
+        }
+    };
+
+    const req2 = https.request(options, (r) => {
+        let data = "";
+        r.on("data", chunk => data += chunk);
+        r.on("end", () => {
+            const parsed = JSON.parse(data);
+            if (parsed.ok) resolve();
+            else reject(parsed);
+        });
+    });
+
+    req2.on("error", reject);
+    req2.write(body);
+    req2.end();
+});
+
+    // Promise.all(TELEGRAM_CHAT_IDS.map(id => sendToOne(id)))
+    //     .then(() => res.json({ success: true }))
+    //     .catch(err => { console.log(err); res.status(500).json(err); });
+
+     // sedn to tlg for both only group
+   Promise.all(
+    TELEGRAM_CHAT_IDS.flatMap(chatId => {
+        const sends = [sendToOne(chatId, messageOrder)];
+
+        if (messageComment) {
+            sends.push(sendToOne(chatId, messageComment));
+        }
+
+        return sends;
+    })
+)
+.then(() => res.json({ success: true }))
+.catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+});
+
+});
+
+// ═══════════════════════════════════════
+//  SEND RETURN TELEGRAM
+// ═══════════════════════════════════════
+app.post("/api/send-return-telegram", (req, res) => {
+    const { invoice } = req.body;
+    if (!invoice) return res.status(400).json({ error: "No invoice data" });
+
+    const now = new Date(invoice.time);
+    const p   = v => String(v).padStart(2, '0');
+
+    const message =
+`↩️ RETURN PAYMENT
+━━━━━━━━━━━━━━━━━━━━
+Transaction Has Been Returned!
+
+🆔 Invoice ID: ${invoice.invoiceID}
+🪑 Table: ${invoice.tableName || invoice.table || '-'}
+📅 Order Date: ${p(now.getDate())}-${p(now.getMonth()+1)}-${now.getFullYear()}
+🕐 Order Time: ${p(now.getHours())}:${p(now.getMinutes())}:${p(now.getSeconds())}
+💵 Total Price: $${parseFloat(invoice.totalUSD || 0).toFixed(2)}
+💳 Payment Method: ${invoice.paymentMethod || 'Cash'}
+━━━━━━━━━━━━━━━━━━━━`;
+
     const sendToOne = (chatId) => new Promise((resolve, reject) => {
-        const body = JSON.stringify({ chat_id: chatId, text: message });
+        const body    = JSON.stringify({ chat_id: chatId, text: message });
         const options = {
             hostname: "api.telegram.org",
             path:     `/bot${TELEGRAM_TOKEN}/sendMessage`,
@@ -928,8 +1097,8 @@ Thank you!Enjoy your coffee!
             r.on("data", chunk => data += chunk);
             r.on("end", () => {
                 const parsed = JSON.parse(data);
-                if (parsed.ok) { console.log("✅ Sent to", chatId); resolve(); }
-                else           { reject(parsed); }
+                if (parsed.ok) resolve();
+                else reject(parsed);
             });
         });
         req2.on("error", reject);
@@ -939,7 +1108,7 @@ Thank you!Enjoy your coffee!
 
     Promise.all(TELEGRAM_CHAT_IDS.map(id => sendToOne(id)))
         .then(() => res.json({ success: true }))
-        .catch(err => { console.log(err); res.status(500).json(err); });
+        .catch(err => { console.error(err); res.status(500).json(err); });
 });
 
 // ═══════════════════════════════════════

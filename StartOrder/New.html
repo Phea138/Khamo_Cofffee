@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Order</title>
     <link rel="stylesheet" href="NewStyle.css">
-    <link rel="stylesheet" href="/ManagerApprovel/logManager.css">
+    <link rel="stylesheet" href="/POS_SYSTEM/ManagerApprovel/logManager.css">
 
     <style>
         /* ══════════════════════════════════════════
@@ -31,7 +32,7 @@
             max-width: 94vw;
             height: 500px;
             overflow: hidden;
-            box-shadow: 0 24px 60px rgba(0,0,0,.35), 0 0 0 1px rgba(219,200,168,.6);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .35), 0 0 0 1px rgba(219, 200, 168, .6);
         }
 
         /* ── Header strip ── */
@@ -42,15 +43,20 @@
             align-items: center;
             gap: 12px;
         }
+
         .modal-header-icon {
-            width: 40px; height: 40px;
-            background: rgba(245,166,35,.2);
-            border: 1.5px solid rgba(245,166,35,.35);
+            width: 40px;
+            height: 40px;
+            background: rgba(245, 166, 35, .2);
+            border: 1.5px solid rgba(245, 166, 35, .35);
             border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 18px;
             flex-shrink: 0;
         }
+
         .modal-header-text h2 {
             font-family: 'Playfair Display', Georgia, serif;
             font-size: 17px;
@@ -59,14 +65,17 @@
             letter-spacing: .2px;
             line-height: 1.2;
         }
+
         .modal-header-text p {
             font-size: 11px;
-            color: rgba(253,240,216,.5);
+            color: rgba(253, 240, 216, .5);
             margin-top: 3px;
             letter-spacing: .3px;
         }
 
-        .modal-body { padding: 22px 24px 24px; }
+        .modal-body {
+            padding: 22px 24px 24px;
+        }
 
         /* ── Password dot display ── */
         .pwd-display {
@@ -79,9 +88,10 @@
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            box-shadow: inset 0 2px 6px rgba(107,76,42,.06);
+            box-shadow: inset 0 2px 6px rgba(107, 76, 42, .06);
             transition: border-color .2s, box-shadow .2s;
         }
+
         .pwd-label {
             font-size: 11px;
             font-weight: 700;
@@ -90,14 +100,25 @@
             color: #a08060;
             white-space: nowrap;
         }
-        .pwd-dots { display: flex; gap: 8px; align-items: center; }
+
+        .pwd-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
         .pwd-dot {
-            width: 11px; height: 11px;
+            width: 11px;
+            height: 11px;
             border-radius: 50%;
             background: #dbc8a8;
             transition: background .15s, transform .15s;
         }
-        .pwd-dot.filled { background: #1a1108; transform: scale(1.1); }
+
+        .pwd-dot.filled {
+            background: #1a1108;
+            transform: scale(1.1);
+        }
 
         /* ── Numpad ── */
         .numpad {
@@ -106,6 +127,7 @@
             gap: 10px;
             margin-bottom: 16px;
         }
+
         .num-btn {
             height: 56px;
             background: #fff;
@@ -115,46 +137,121 @@
             font-weight: 600;
             color: #1a1108;
             cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all .15s;
-            box-shadow: 0 1px 4px rgba(107,76,42,.08);
+            box-shadow: 0 1px 4px rgba(107, 76, 42, .08);
             font-family: 'DM Mono', 'Courier New', monospace;
             user-select: none;
         }
-        .num-btn:hover { background: #f7ead8; border-color: #b8821a; transform: translateY(-1px); }
-        .num-btn:active { transform: translateY(0); background: #f0dfc2; }
-        .num-btn.del-btn { background: #f0dfc2; border-color: #c9b08a; font-size: 14px; font-family: Arial, sans-serif; color: #6b4c2a; font-weight: 700; }
-        .num-btn.del-btn:hover { background: #e8cfa0; border-color: #b8821a; }
+
+        .num-btn:hover {
+            background: #f7ead8;
+            border-color: #b8821a;
+            transform: translateY(-1px);
+        }
+
+        .num-btn:active {
+            transform: translateY(0);
+            background: #f0dfc2;
+        }
+
+        .num-btn.del-btn {
+            background: #f0dfc2;
+            border-color: #c9b08a;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            color: #6b4c2a;
+            font-weight: 700;
+        }
+
+        .num-btn.del-btn:hover {
+            background: #e8cfa0;
+            border-color: #b8821a;
+        }
 
         /* ── Modal actions ── */
-        .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
         .btn-confirm {
             height: 48px;
             background: linear-gradient(135deg, #1a1108, #3a2510);
-            border: none; border-radius: 12px;
-            color: #fdf0d8; font-size: 14px; font-weight: 700;
-            cursor: pointer; transition: all .2s; letter-spacing: .3px;
-            box-shadow: 0 4px 14px rgba(30,17,8,.3); font-family: inherit;
+            border: none;
+            border-radius: 12px;
+            color: #fdf0d8;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .2s;
+            letter-spacing: .3px;
+            box-shadow: 0 4px 14px rgba(30, 17, 8, .3);
+            font-family: inherit;
         }
-        .btn-confirm:hover { background: linear-gradient(135deg, #2e1e0f, #1a1108); transform: translateY(-1px); }
+
+        .btn-confirm:hover {
+            background: linear-gradient(135deg, #2e1e0f, #1a1108);
+            transform: translateY(-1px);
+        }
+
         .btn-cancel {
-            height: 48px; background: #fff;
-            border: 1.5px solid #dbc8a8; border-radius: 12px;
-            color: #6b4c2a; font-size: 14px; font-weight: 600;
-            cursor: pointer; transition: all .2s; font-family: inherit;
+            height: 48px;
+            background: #fff;
+            border: 1.5px solid #dbc8a8;
+            border-radius: 12px;
+            color: #6b4c2a;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            font-family: inherit;
         }
-        .btn-cancel:hover { background: #f7ead8; border-color: #b8821a; }
+
+        .btn-cancel:hover {
+            background: #f7ead8;
+            border-color: #b8821a;
+        }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%       { transform: translateX(-8px); }
-            40%       { transform: translateX(8px); }
-            60%       { transform: translateX(-5px); }
-            80%       { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-8px);
+            }
+
+            40% {
+                transform: translateX(8px);
+            }
+
+            60% {
+                transform: translateX(-5px);
+            }
+
+            80% {
+                transform: translateX(5px);
+            }
         }
-        .shake { animation: shake .35s ease; }
-        .pwd-display.error { border-color: #c0392b; box-shadow: 0 0 0 3px rgba(192,57,43,.12); }
-        .pwd-display.error .pwd-dot.filled { background: #c0392b; }
+
+        .shake {
+            animation: shake .35s ease;
+        }
+
+        .pwd-display.error {
+            border-color: #c0392b;
+            box-shadow: 0 0 0 3px rgba(192, 57, 43, .12);
+        }
+
+        .pwd-display.error .pwd-dot.filled {
+            background: #c0392b;
+        }
 
         /* ══════════════════════════════════════════
            CLOSE SHIFT CONFIRM POPUP
@@ -162,13 +259,16 @@
         #closeShiftModal {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0, 0, 0, 0.45);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 99999;
         }
-        #closeShiftModal.active { display: flex; }
+
+        #closeShiftModal.active {
+            display: flex;
+        }
 
         .cs-box {
             background: #fff;
@@ -176,7 +276,7 @@
             padding: 40px 48px 36px;
             min-width: 380px;
             max-width: 92vw;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.30);
             text-align: center;
         }
 
@@ -206,10 +306,17 @@
             cursor: pointer;
             font-family: Arial, sans-serif;
             transition: background .15s, transform .1s;
-            box-shadow: 0 4px 14px rgba(46,204,113,0.35);
+            box-shadow: 0 4px 14px rgba(46, 204, 113, 0.35);
         }
-        .cs-yes:hover { background: #27ae60; transform: translateY(-1px); }
-        .cs-yes:active { transform: translateY(0); }
+
+        .cs-yes:hover {
+            background: #27ae60;
+            transform: translateY(-1px);
+        }
+
+        .cs-yes:active {
+            transform: translateY(0);
+        }
 
         .cs-no {
             padding: 14px 52px;
@@ -222,10 +329,17 @@
             cursor: pointer;
             font-family: Arial, sans-serif;
             transition: background .15s, transform .1s;
-            box-shadow: 0 4px 14px rgba(231,76,60,0.35);
+            box-shadow: 0 4px 14px rgba(231, 76, 60, 0.35);
         }
-        .cs-no:hover { background: #c0392b; transform: translateY(-1px); }
-        .cs-no:active { transform: translateY(0); }
+
+        .cs-no:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+        }
+
+        .cs-no:active {
+            transform: translateY(0);
+        }
 
         /* ── Success toast ── */
         #shiftToast {
@@ -240,12 +354,13 @@
             font-size: 15px;
             font-weight: 600;
             font-family: Arial, sans-serif;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
             z-index: 100000;
             opacity: 0;
-            transition: all .35s cubic-bezier(.22,1,.36,1);
+            transition: all .35s cubic-bezier(.22, 1, .36, 1);
             pointer-events: none;
         }
+
         #shiftToast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
@@ -279,24 +394,80 @@
             </div>
             <div class="summary-actions">
                 <button class="sum-confirm" id="summaryConfirm">Confirm</button>
-                <button class="sum-cancel"  id="summaryCancel">Cancel</button>
+                <button class="sum-cancel" id="summaryCancel">Cancel</button>
             </div>
         </div>
     </div>
 
+    <!-- ===== RETURN PAYMENT MODAL ===== -->
+    <div id="returnModal" class="modal" style="display:none;">
+        <div class="modal-box" style="width:480px;height:auto;max-height:90vh;max-width:96vw;overflow-y:auto;">
+            <div class="modal-header">
+                <div class="modal-header-icon">↩️</div>
+                <div class="modal-header-text">
+                    <h2>Return Payment</h2>
+                    <p>Select a transaction to return</p>
+                </div>
+            </div>
+            <div class="modal-body" style="padding:18px 20px;">
+
+                <!-- Transaction list -->
+                <div id="returnListBox" style="margin-bottom:14px;"></div>
+
+                <!-- Info box (shown after selecting) -->
+                <div id="returnInfoBox" style="display:none;background:#fff8f0;border:1.5px solid #dbc8a8;
+                        border-radius:12px;padding:16px 18px;margin-bottom:16px;">
+                    <div style="font-size:13px;font-weight:700;color:#6b4c2a;
+                            letter-spacing:.5px;margin-bottom:10px;">Transaction Info:</div>
+                    <table style="width:100%;font-size:14px;border-collapse:collapse;">
+                        <tr>
+                            <td style="color:#a08060;padding:3px 0;width:120px;">Invoice</td>
+                            <td style="font-weight:600;color:#1a1108;" id="retInvoiceID"></td>
+                        </tr>
+                        <tr>
+                            <td style="color:#a08060;padding:3px 0;">Table</td>
+                            <td style="font-weight:600;color:#1a1108;" id="retTable"></td>
+                        </tr>
+                        <tr>
+                            <td style="color:#a08060;padding:3px 0;">Total Price</td>
+                            <td style="font-weight:600;color:#1a1108;" id="retTotal"></td>
+                        </tr>
+                        <tr>
+                            <td style="color:#a08060;padding:3px 0;">Payment</td>
+                            <td style="font-weight:700;" id="retPayment"></td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:14px;font-size:14px;font-weight:600;
+                            color:#1a1108;text-align:center;">
+                        Are you sure to Return This Transaction?
+                    </div>
+                </div>
+                <!-- Error -->
+                <div id="returnSearchError" style="display:none;color:#c0392b;font-size:13px;margin-bottom:10px;"></div>
+                <!-- Actions -->
+                <div class="modal-actions">
+                    <button id="returnConfirmBtn" class="btn-confirm" onclick="confirmReturn()"
+                        style="display:none;background:linear-gradient(135deg,#27ae60,#1e8449);">
+                        ✓ Yes, Return
+                    </button>
+                    <button class="btn-cancel" onclick="closeReturnModal()">✕ Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- ===== COMMENT MODAL — sized for new coffee-theme keyboard ===== -->
     <div id="commentModal" class="modal" style="display:none;">
-        <div class="modal-box"
-             style="width:740px;
+        <div class="modal-box" style="width:740px;
                     height:365px;
                     max-width:96vw;
                     border-radius:18px;
                     background:transparent;
                     border:1.5px solid rgba(184,130,26,0.28);
                     box-shadow:0 28px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(184,130,26,0.12);">
-            <iframe src="/Khamo POS/POS_SYSTEM/keyboardComment/keyboard.html"
-                    style="width:100%; height:100%; border:none; border-radius:16px; display:block;"
-                    id="commentFrame">
+            <iframe src="/POS_SYSTEM/keyboardComment/keyboard.html"
+                style="width:100%; height:100%; border:none; border-radius:16px; display:block;" id="commentFrame">
             </iframe>
         </div>
     </div>
@@ -307,7 +478,7 @@
             <h2>Are you sure to close shift?</h2>
             <div class="cs-actions">
                 <button class="cs-yes" onclick="confirmCloseShift()">Yes</button>
-                <button class="cs-no"  onclick="cancelCloseShift()">No</button>
+                <button class="cs-no" onclick="cancelCloseShift()">No</button>
             </div>
         </div>
     </div>
@@ -353,7 +524,7 @@
                 </div>
                 <div class="modal-actions">
                     <button class="btn-confirm" id="loginConfirm">✓ Confirm</button>
-                    <button class="btn-cancel"  id="loginCancel">✕ Cancel</button>
+                    <button class="btn-cancel" id="loginCancel">✕ Cancel</button>
                 </div>
             </div>
         </div>
@@ -383,10 +554,18 @@
         <div class="keypad-box">
             <div class="display" id="display">0</div>
             <div class="keys">
-                <div class="key">1</div><div class="key">2</div><div class="key">3</div>
-                <div class="key">4</div><div class="key">5</div><div class="key">6</div>
-                <div class="key">7</div><div class="key">8</div><div class="key">9</div>
-                <div class="key">.</div><div class="key">0</div><div class="key del">Del</div>
+                <div class="key">1</div>
+                <div class="key">2</div>
+                <div class="key">3</div>
+                <div class="key">4</div>
+                <div class="key">5</div>
+                <div class="key">6</div>
+                <div class="key">7</div>
+                <div class="key">8</div>
+                <div class="key">9</div>
+                <div class="key">.</div>
+                <div class="key">0</div>
+                <div class="key del">Del</div>
             </div>
             <div class="actions">
                 <button id="ok">OK</button>
@@ -402,8 +581,13 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th><th>Size</th><th>Qty</th>
-                            <th>Price</th><th>Discount</th><th>Unit Price</th><th></th>
+                            <th>Name</th>
+                            <th>Size</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Discount</th>
+                            <th>Unit Price</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody id="table-item"></tbody>
@@ -420,21 +604,39 @@
 
         <div class="total-amount">
             <table>
-                <tr><td>Sub Total:</td><td id="subTotal"></td></tr>
-                <tr><td>Discount:</td><td id="discount"></td></tr>
-                <tr><td>Total in USD:</td><td id="totalPriceUSD"></td></tr>
-                <tr><td>Total in Riel:</td><td id="totalPriceKh"></td></tr>
-                <tr><td>Change in KH:</td><td id="changeKH"></td></tr>
-                <tr><td>Change in USD:</td><td id="changeUSD"></td></tr>
+                <tr>
+                    <td>Sub Total:</td>
+                    <td id="subTotal"></td>
+                </tr>
+                <tr>
+                    <td>Discount:</td>
+                    <td id="discount"></td>
+                </tr>
+                <tr>
+                    <td>Total in USD:</td>
+                    <td id="totalPriceUSD"></td>
+                </tr>
+                <tr>
+                    <td>Total in Riel:</td>
+                    <td id="totalPriceKh"></td>
+                </tr>
+                <tr>
+                    <td>Change in KH:</td>
+                    <td id="changeKH"></td>
+                </tr>
+                <tr>
+                    <td>Change in USD:</td>
+                    <td id="changeUSD"></td>
+                </tr>
             </table>
         </div>
 
         <div class="payment">
             <div class="section-title">Payment Method</div>
             <div class="payment-setting">
-                <button id="cashKHPayment"  type="button">Cash KH</button>
+                <button id="cashKHPayment" type="button">Cash KH</button>
                 <button id="cashUSDPayment" type="button">Cash USD</button>
-                <button id="abaQRPayment"   type="button" onclick="handleABAPayment('ABA QR')">ABA QR</button>
+                <button id="abaQRPayment" type="button" onclick="handleABAPayment('ABA QR')">ABA QR</button>
                 <button id="abaCardPayment" type="button" onclick="handleABAPayment('ABA Card')">ABA Card</button>
             </div>
         </div>
@@ -474,48 +676,272 @@
             if (e.target.classList.contains('num-btn') && !e.target.classList.contains('del-btn')) appendDigit(e.target.dataset.val);
             if (e.target.classList.contains('del-btn') || e.target.closest('.del-btn')) deleteDigit();
             if (e.target.id === 'loginConfirm' || e.target.closest('#loginConfirm')) confirmPassword();
-            if (e.target.id === 'loginCancel'  || e.target.closest('#loginCancel'))  closeManagerModal();
+            if (e.target.id === 'loginCancel' || e.target.closest('#loginCancel')) closeManagerModal();
         });
 
         function openManagerModal() {
             pwd = ""; updateDots();
-            document.getElementById('pwdDisplay').classList.remove('error','shake');
+            document.getElementById('pwdDisplay').classList.remove('error', 'shake');
             modal.style.display = "flex";
         }
         function closeManagerModal() { modal.style.display = "none"; pwd = ""; updateDots(); }
-        function appendDigit(val)    { if (pwd.length >= MAX_DIGITS) return; pwd += val; updateDots(); }
-        function deleteDigit()       { pwd = pwd.slice(0,-1); updateDots(); document.getElementById('pwdDisplay').classList.remove('error','shake'); }
-        function updateDots()        { document.querySelectorAll('.pwd-dot').forEach((d,i) => d.classList.toggle('filled', i < pwd.length)); }
+        function appendDigit(val) { if (pwd.length >= MAX_DIGITS) return; pwd += val; updateDots(); }
+        function deleteDigit() { pwd = pwd.slice(0, -1); updateDots(); document.getElementById('pwdDisplay').classList.remove('error', 'shake'); }
+        function updateDots() { document.querySelectorAll('.pwd-dot').forEach((d, i) => d.classList.toggle('filled', i < pwd.length)); }
 
         function confirmPassword() {
-            if (VALID_PASSWORDS.includes(pwd)) { closeManagerModal(); showSettingPage(2); }
-            else {
+            if (VALID_PASSWORDS.includes(pwd)) {
+                closeManagerModal();
+                showSettingPage(2);
+
+            } else {
                 const disp = document.getElementById('pwdDisplay');
-                disp.classList.add('error','shake');
+                disp.classList.add('error', 'shake');
                 pwd = ""; updateDots();
-                setTimeout(() => disp.classList.remove('error','shake'), 500);
+                setTimeout(() => disp.classList.remove('error', 'shake'), 500);
             }
         }
+
 
         function showSettingPage(n) {
             document.getElementById("settingPage1").style.display = n === 1 ? "" : "none";
             document.getElementById("settingPage2").style.display = n === 2 ? "" : "none";
         }
-        function backToSettingPage1()   { showSettingPage(1); }
-        function goToTransactionRecord(){ window.location.href = "/Khamo POS/POS_SYSTEM/StransactionRecord/stransaction.html"; }
-        function handleReturnPayment()  { alert("Return Payment — coming soon."); }
+        function backToSettingPage1() {
+            showSettingPage(1);
+        }
+
+        function goToTransactionRecord() {
+            window.location.href = "/Khamo POS/POS_SYSTEM/StransactionRecord/stransaction.html";
+        }
+
+        //        function handleReturnPayment() {
+        //          alert("Staff Claim Drink — coming soon.");
+        // }
+
+        /* ══ RETURN PAYMENT ══ */
+        // let returnInvoiceData = null;
+
+        // async function handleReturnPayment() {
+        //     returnInvoiceData = null;
+        //     document.getElementById('returnInfoBox').style.display    = 'none';
+        //     document.getElementById('returnConfirmBtn').style.display = 'none';
+        //     document.getElementById('returnSearchError').style.display = 'none';
+        //     document.getElementById('returnListBox').innerHTML =
+        //         '<div style="text-align:center;color:#a08060;font-size:13px;padding:10px;">Loading...</div>';
+        //     document.getElementById('returnModal').style.display = 'flex';
+
+        //     try {
+        //         const res  = await fetch('http://localhost:3000/api/transactions');
+        //         const all  = await res.json();
+        //         const paid = all.filter(o => o.status === 'PAID');
+
+        //         const box = document.getElementById('returnListBox');
+
+        //         if (!paid.length) {
+        //             box.innerHTML = '<div style="text-align:center;color:#a08060;font-size:13px;padding:10px;">No paid transactions found.</div>';
+        //             return;
+        //         }
+
+        //         box.innerHTML = paid.map(o => `
+        //             <div onclick="selectReturnInvoice('${o.invoiceID}')"
+        //                  style="display:flex;justify-content:space-between;align-items:center;
+        //                         padding:10px 14px;margin-bottom:8px;background:#fff;
+        //                         border:1.5px solid #dbc8a8;border-radius:10px;cursor:pointer;
+        //                         transition:background .15s,border-color .15s;"
+        //                  onmouseover="this.style.background='#f7ead8';this.style.borderColor='#b8821a'"
+        //                  onmouseout="this.style.background='#fff';this.style.borderColor='#dbc8a8'">
+        //                 <div>
+        //                     <div style="font-size:13px;font-weight:700;color:#1a1108;">${o.invoiceID}</div>
+        //                     <div style="font-size:11px;color:#a08060;margin-top:2px;">${o.table || '-'} · ${o.paymentMethod || 'Cash'}</div>
+        //                 </div>
+        //                 <div style="font-size:14px;font-weight:700;color:#27ae60;">
+        //                     $${parseFloat(o.totalUSD || 0).toFixed(2)}
+        //                 </div>
+        //             </div>`).join('');
+
+        //     } catch (e) {
+        //         console.error(e);
+        //         document.getElementById('returnListBox').innerHTML =
+        //             '<div style="color:#c0392b;font-size:13px;">Server error loading transactions.</div>';
+        //     }
+        // }
+
+        async function handleReturnPayment() {
+            /* ── Get invoiceID from URL ?view= param ── */
+            const params = new URLSearchParams(window.location.search);
+            const viewID = params.get("view");
+
+            if (!viewID) {
+                alert("Please open a paid invoice first from Transaction Record.");
+                return;
+            }
+
+            returnInvoiceData = null;
+            document.getElementById('returnInfoBox').style.display = 'none';
+            document.getElementById('returnConfirmBtn').style.display = 'none';
+            document.getElementById('returnSearchError').style.display = 'none';
+            document.getElementById('returnListBox').innerHTML = '';
+            document.getElementById('returnModal').style.display = 'flex';
+
+            try {
+                const res = await fetch(`http://localhost:3000/api/invoice-detail/${viewID}`);
+                const data = await res.json();
+
+                if (!data || data.error) {
+                    document.getElementById('returnSearchError').textContent = 'Invoice not found.';
+                    document.getElementById('returnSearchError').style.display = 'block';
+                    return;
+                }
+                if (data.status === 'RETURNED') {
+                    document.getElementById('returnSearchError').textContent = 'This invoice has already been returned.';
+                    document.getElementById('returnSearchError').style.display = 'block';
+                    return;
+                }
+                if (data.status === 'DELETED') {
+                    document.getElementById('returnSearchError').textContent = 'This invoice was deleted and cannot be returned.';
+                    document.getElementById('returnSearchError').style.display = 'block';
+                    return;
+                }
+
+                returnInvoiceData = data;
+
+                document.getElementById('retInvoiceID').textContent = data.invoiceID || viewID;
+                document.getElementById('retTable').textContent = data.tableName || data.table || '-';
+                document.getElementById('retTotal').textContent = '$' + parseFloat(data.totalUSD || 0).toFixed(2);
+                document.getElementById('retPayment').textContent = data.paymentMethod || 'Cash';
+                document.getElementById('retPayment').style.color =
+                    (data.paymentMethod || '').toLowerCase().includes('aba') ? '#e67e22' : '#c0392b';
+
+                document.getElementById('returnInfoBox').style.display = 'block';
+                document.getElementById('returnConfirmBtn').style.display = 'inline-block';
+
+            } catch (e) {
+                console.error(e);
+                document.getElementById('returnSearchError').textContent = 'Server error. Check console.';
+                document.getElementById('returnSearchError').style.display = 'block';
+            }
+        }
+
+        async function selectReturnInvoice(invoiceID) {
+            const err = document.getElementById('returnSearchError');
+            err.style.display = 'none';
+
+            try {
+                const res = await fetch(`http://localhost:3000/api/invoice-detail/${invoiceID}`);
+                const data = await res.json();
+
+                if (!data || data.error) {
+                    err.textContent = 'Invoice not found.';
+                    err.style.display = 'block';
+                    return;
+                }
+
+                returnInvoiceData = data;
+
+                document.getElementById('retInvoiceID').textContent = data.invoiceID || invoiceID;
+                document.getElementById('retTable').textContent = data.tableName || data.table || '-';
+                document.getElementById('retTotal').textContent = '$' + parseFloat(data.totalUSD || 0).toFixed(2);
+                document.getElementById('retPayment').textContent = data.paymentMethod || 'Cash';
+                document.getElementById('retPayment').style.color =
+                    (data.paymentMethod || '').toLowerCase().includes('aba') ? '#e67e22' : '#c0392b';
+
+                document.getElementById('returnListBox').style.display = 'none';
+                document.getElementById('returnInfoBox').style.display = 'block';
+                document.getElementById('returnConfirmBtn').style.display = 'inline-block';
+
+            } catch (e) {
+                console.error(e);
+                err.textContent = 'Server error. Check console.';
+                err.style.display = 'block';
+            }
+        }
+
+        // async function confirmReturn() {
+        //     if (!returnInvoiceData) return;
+        //     const invoiceID = returnInvoiceData.invoiceID;
+
+        //     try {
+        //         const res  = await fetch('http://localhost:3000/api/return-invoice', {
+        //             method:  'POST',
+        //             headers: { 'Content-Type': 'application/json' },
+        //             body:    JSON.stringify({ invoiceID })
+        //         });
+        //         const data = await res.json();
+
+        //         if (data.success) {
+        //             document.getElementById('returnModal').style.display = 'none';
+        //             showShiftToast(`↩️ Invoice ${invoiceID} marked as RETURNED.`);
+        //             returnInvoiceData = null;
+        //         } else {
+        //             alert('Return failed. Check server.');
+        //         }
+        //     } catch (e) {
+        //         console.error(e);
+        //         alert('Server error. Check console.');
+        //     }
+        // }
+
+        async function confirmReturn() {
+            if (!returnInvoiceData) return;
+            const invoiceID = returnInvoiceData.invoiceID;
+
+            try {
+                const res = await fetch('http://localhost:3000/api/return-invoice', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ invoiceID })
+                });
+                const data = await res.json();
+
+                if (!data.success) { alert('Return failed. Check server.'); return; }
+
+                // send Telegram
+                await fetch('http://localhost:3000/api/send-return-telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ invoice: returnInvoiceData })
+                });
+
+                document.getElementById('returnModal').style.display = 'none';
+                returnInvoiceData = null;
+
+                // go back to transaction record after return
+                showShiftToast(`↩️ Invoice ${invoiceID} returned successfully.`);
+                setTimeout(() => {
+                    window.location.href = "/Khamo POS/POS_SYSTEM/StransactionRecord/stransaction.html";
+                }, 1500);
+
+            } catch (e) {
+                console.error(e);
+                alert('Server error. Check console.');
+            }
+        }
+
+        function closeReturnModal() {
+            document.getElementById('returnModal').style.display = 'none';
+            document.getElementById('returnListBox').style.display = 'block';
+            returnInvoiceData = null;
+        }
 
         /* ══ CLOSE SHIFT ══ */
-        function openCloseShiftConfirm() { document.getElementById("closeShiftModal").classList.add("active"); }
-        function cancelCloseShift()      { document.getElementById("closeShiftModal").classList.remove("active"); }
+        function openCloseShiftConfirm() {
+            document.getElementById("closeShiftModal").classList.add("active");
+        }
+        function cancelCloseShift() {
+            document.getElementById("closeShiftModal").classList.remove("active");
+        }
 
         async function confirmCloseShift() {
             document.getElementById("closeShiftModal").classList.remove("active");
             try {
-                const res  = await fetch("http://localhost:3000/api/close-shift", { method: "POST", headers: { "Content-Type": "application/json" } });
+                const res = await fetch("http://localhost:3000/api/close-shift", { method: "POST", headers: { "Content-Type": "application/json" } });
                 const data = await res.json();
-                if (data.success) showShiftToast(`✅ Shift closed — ${data.closed} transactions archived.`);
-                else alert("Close shift failed. Check server.");
+                if (data.success) {
+                    alert('Shift Has been closed. Log in for open shift.');
+                    showShiftToast(`✅ Shift closed — ${data.closed} transactions archived.`);
+                    window.location.href = "/POS_SYSTEM/";
+                } else alert("Close shift failed. Check server.");
             } catch (err) { console.error(err); alert("Server error. Check console."); }
         }
 
@@ -525,7 +951,7 @@
             setTimeout(() => t.classList.remove("show"), 3500);
         }
 
-        document.getElementById("closeShiftModal").addEventListener("click", function(e) {
+        document.getElementById("closeShiftModal").addEventListener("click", function (e) {
             if (e.target === this) cancelCloseShift();
         });
 
@@ -535,17 +961,19 @@
             if (!selected) { alert("Please select an item first!"); return; }
             document.getElementById("commentModal").style.display = "flex";
         }
-        function handlePromoCode()  { alert("Promo Code — coming soon."); }
-        function handleStaffClaim() { alert("Staff Claim Drink — coming soon."); }
+
+        function handlePromoCode() { alert("Promo Code —  Coming Soon"); }
+        function handleStaffClaim() { alert("Staff Claim Drink —  Coming Soon"); }
 
         /* ══ KEYBOARD iframe messages ══ */
-        window.addEventListener("message", function(e) {
+        window.addEventListener("message", function (e) {
             if (e.data && e.data.type === "CLOSE_COMMENT") {
                 document.getElementById("commentModal").style.display = "none";
             }
         });
     </script>
 
-    <script src="/Khamo POS/POS_SYSTEM/StartOrder/NewScript.js"></script>
+    <script src="NewScript.js"></script>
 </body>
+
 </html>
