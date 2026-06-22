@@ -6,6 +6,7 @@
     <title>Document</title>
     <link rel="stylesheet" href="NavbarStyle.css">
     <style>
+        .navbar ul li:nth-child(3) a { color:#5d0f07; }
         .content{
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -111,18 +112,16 @@
         <div class="feature2">
             <h3>Products Report</h3>
             <p>Generate detailed reports on product performance, sales, and inventory levels to make informed business decisions.</p>
-            <button onclick="commingsoon()" >View Report</button>
+            <button onclick="openProductRecord()">View Report</button>
         </div>
     </div>
 <script>
     function commingsoon(){
         alert("This feature is coming soon!");
     }
+    function openProductRecord(){
+        window.location.href = "/Khamo POS/POS_SYSTEM/Navbar/ProductRecord/ProductRecord.php";
+    }
 </script>
 </body>
 </html>
-<!-- <script>
-    document.getElementById('NewWasted').addEventListener('click', function () {
-        window.location.href = '/Khamo POS/POS_SYSTEM/Navbar/Wasted/Wasted.php';
-    });
-</script> -->

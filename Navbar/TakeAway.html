@@ -38,7 +38,7 @@
             flex: 1;
             display: flex;
         }
-
+        .navbar ul li:nth-child(2) a { color:#5d0f07; }
         .navbar ul li a {
             flex: 1;
             display: flex;
@@ -268,16 +268,25 @@
     </div>
 
     <script>
-        function loadDineInOrders() {
-            const orders = JSON.parse(localStorage.getItem("dineInOrders")) || [];
-            const container = document.getElementById("dineInList");
+       
+        let selectedOrderId = null;
 
+        function loadTakeAwayOrders() {
+
+            // const orders = JSON.parse(localStorage.getItem("takeAwayOrders")) || [];
+            const orders = JSON.parse(localStorage.getItem("dineInOrders")) || [];
+
+            const container = document.getElementById("dineInList"); // or whatever your container ID is
             container.innerHTML = "";
 
-            orders.forEach(order => {
+            /* ── only show Takeaway orders ── */
+            const filtered = orders.filter(o =>
+                (o.orderType || "").toLowerCase().includes("take") ||
+                (o.table || "").toLowerCase().includes("takeaway")
+            );
 
+            filtered.forEach(order => {
                 const card = document.createElement("div");
-
                 card.style.cursor = "pointer";
                 card.style.background = "white";
                 card.style.margin = "10px";
@@ -287,32 +296,17 @@
 
                 card.onclick = function () {
                     selectedOrderId = order.id;
-
-                    document.querySelectorAll("#dineInList div").forEach(d => {
-                        d.style.border = "none";
-                    });
-
+                    document.querySelectorAll("#dineInList div").forEach(d => d.style.border = "none");
                     card.style.border = "3px solid green";
                 };
 
-                let html = `
-            <strong>${order.table}</strong><br>
-            <span style="color:red; font-weight:bold;">
-                UNPAID
-            </span>
-            <br>
-            <small>Time: ${order.time}</small>
-            <br>
-            <strong>Total: $${order.total}</strong>
-            <br><br>
-            <button onclick="cancelOrder(${order.id})"
-                style="background:red;color:white;border:none;
-                       padding:6px 12px;border-radius:6px;cursor:pointer;">
-                Cancel
-            </button>
-        `;
+                card.innerHTML = `
+                <strong>${order.table}</strong><br>
+                <span style="color:red;font-weight:bold;">UNPAID</span><br>
+                <small>Time: ${order.time}</small><br>
+                <strong>Total: $${order.total}</strong>
+            `;
 
-                card.innerHTML = html;
                 container.appendChild(card);
             });
         }
@@ -320,42 +314,40 @@
         /// this cancel order button  
         function cancelOrder(orderId) {
 
+            // let orders = JSON.parse(localStorage.getItem("takeAwayOrders")) || [];
             let orders = JSON.parse(localStorage.getItem("dineInOrders")) || [];
 
             orders = orders.filter(order => order.id !== orderId);
 
+            // localStorage.setItem("takeAwayOrders", JSON.stringify(orders));
             localStorage.setItem("dineInOrders", JSON.stringify(orders));
 
-            loadDineInOrders();
+            // loadDineInOrders();
+            loadTakeAwayOrders();
         }
 
         // this function editorder when user not yet pay
         function editOrder() {
-
             if (!selectedOrderId) {
-                alert("Please select a table first");
-                return;
+                alert("Please select an order first"); return;
             }
 
-            const orders = JSON.parse(localStorage.getItem("dineInOrders")) || [];
-
+            // const orders = JSON.parse(localStorage.getItem("takeAwayOrders")) || [];
+            let orders = JSON.parse(localStorage.getItem("dineInOrders")) || [];
             const order = orders.find(o => o.id === selectedOrderId);
-
             if (!order) {
-                alert("Order not found");
-                return;
+                alert("Order not found"); return;
             }
-
-            // Save selected table
+            localStorage.setItem("selectedOrderId", order.id);
             localStorage.setItem("selectedTable", order.table);
-            localStorage.setItem("orderType", "Dine in");
+            localStorage.setItem("orderType", "Takeaway");
             window.location.href = "../StartOrder/New.html";
-            // window.location.replace("../Navbar/DineIn.html");
         }
 
 
         function deleteItem(orderId, itemIndex) {
             let orders = JSON.parse(localStorage.getItem("dineInOrders")) || [];
+            // let orders = JSON.parse(localStorage.getItem("takeAwayOrders")) || [];
 
             orders = orders.map(order => {
                 if (order.id === orderId) {
@@ -366,11 +358,14 @@
 
             orders = orders.filter(order => order.items.length > 0);
 
+            // localStorage.setItem("takeAwayOrders", JSON.stringify(orders));
             localStorage.setItem("dineInOrders", JSON.stringify(orders));
-            loadDineInOrders();
+            // loadDineInOrders();
+            loadTakeAwayOrders();
         }
 
-        loadDineInOrders();
+        // loadDineInOrders();
+        loadTakeAwayOrders();
     </script>
 </body>
 

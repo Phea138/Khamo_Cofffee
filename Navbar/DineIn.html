@@ -32,6 +32,7 @@
             display: flex;
             height: 100%;
         }
+        .navbar ul li:nth-child(1) a { color:#5d0f07; }
 
         .navbar ul li { flex: 1; display: flex; }
 
@@ -197,16 +198,18 @@
     </div>
 
     <script>
-        function loadDineInOrders() {
+         function loadDineInOrders() {
                 const orders = JSON.parse(localStorage.getItem("dineInOrders")) || [];
                 const container = document.getElementById("dineInList");
-
                 container.innerHTML = "";
 
-                orders.forEach(order => {
+                const dineInOnly = orders.filter(o =>
+                    (o.orderType || "Dine In").toLowerCase().includes("dine") &&
+                    !(o.orderType || "").toLowerCase().includes("take")
+                );
 
+                dineInOnly.forEach(order => {
                     const card = document.createElement("div");
-
                     card.style.cursor = "pointer";
                     card.style.background = "white";
                     card.style.margin = "10px";
@@ -216,32 +219,20 @@
 
                     card.onclick = function () {
                         selectedOrderId = order.id;
-
                         document.querySelectorAll("#dineInList div").forEach(d => {
                             d.style.border = "none";
                         });
-
                         card.style.border = "3px solid green";
                     };
 
-                    let html = `
-            <strong>${order.table}</strong><br>
-            <span style="color:red; font-weight:bold;">
-                UNPAID
-            </span>
-            <br>
-            <small>Time: ${order.time}</small>
-            <br>
+                    card.innerHTML = `
+            <strong>${order.table || 'No Table'}</strong><br>
+            <span style="color:red;font-weight:bold;">UNPAID</span><br>
+            <small>Time: ${order.time}</small><br>
             <strong>Total: $${order.total}</strong>
-            <br><br>
-            <button onclick="cancelOrder(${order.id})"
-                style="background:red;color:white;border:none;
-                       padding:6px 12px;border-radius:6px;cursor:pointer;">
-                Cancel
-            </button>
         `;
 
-                    card.innerHTML = html;
+
                     container.appendChild(card);
                 });
             }

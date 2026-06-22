@@ -1,325 +1,4 @@
-//  /* ── DATA ───────────────────────────── */
-// // async function getPaid() {
 
-// //     const res = await fetch("http://localhost:3000/api/transactions");
-// //     const data = await res.json();
-
-// //     return data.map(row => ({
-// //         invoiceID: row.invoiceID,
-// //         table: row.tableName,
-// //         orderType: row.orderType,
-// //         paymentMethod: row.paymentMethod,
-// //         time: row.time,
-// //         totalUSD: row.totalUSD
-// //     }));
-
-// // }
-// async function getPaid() {
-
-//     const res = await fetch("http://localhost:3000/api/transactions");
-//     const data = await res.json();
-
-//     return data.filter(o => o.status === "PAID");
-// }
-
-
-// // function getDel() { return JSON.parse(localStorage.getItem('deletedOrders') || '[]'); }
-// async function getDel() {
-
-//     const res = await fetch("http://localhost:3000/api/transactions");
-//     const data = await res.json();
-
-//     return data.filter(o => o.status === "DELETED");
-// }
-
-
-// /* ── FORMAT ─────────────────────────── */
-// function fid(id) { return '#' + String(id).slice(-6).padStart(6, '0'); }
-// function fdt(t) {
-//   try {
-//     const d = new Date(t); if (isNaN(d)) return t || '-';
-//     const p = v => String(v).padStart(2, '0');
-//     return `${p(d.getDate())}-${p(d.getMonth()+1)}-${d.getFullYear()}  ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
-//   } catch { return t || '-'; }
-// }
-// function pbadge(m) {
-//   const l = (m || '').toLowerCase();
-//   if (l.includes('aba qr'))   return `<span class="badge ba">ABA QR</span>`;
-//   if (l.includes('aba card')) return `<span class="badge bk">ABA Card</span>`;
-//   return `<span class="badge bc">${m || 'Cash'}</span>`;
-// }
-// function emptyRow(cols, msg) {
-//   return `<tr><td colspan="${cols}"><div class="empty">
-//     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
-//       <path stroke-linecap="round" stroke-linejoin="round"
-//             d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/>
-//     </svg>${msg}</div></td></tr>`;
-// }
-
-
-// /* ── RENDER PAID ────────────────────── */
-// async function rPaid() {
-
-//   const data = await getPaid();
-//   const tot  = data.reduce((s, o) => s + parseFloat(o.totalUSD || 0), 0);
-//   const cnt  = data.length;
-//   document.getElementById('pr').textContent = '$' + tot.toFixed(2);
-//   document.getElementById('pc').textContent = cnt;
-//   document.getElementById('pa').textContent = '$' + (cnt ? tot/cnt : 0).toFixed(2);
-//   document.getElementById('pp').textContent = cnt;
-
-//   const tb = document.getElementById('pb');
-//   if (!cnt) { tb.innerHTML = emptyRow(5, 'No paid transactions yet'); return; }
-//   tb.innerHTML = data.map(o => `
-//     <tr data-q="${fid(o.invoiceID)} ${(o.table||'').toLowerCase()}">
-//       <td class="mono">${fid(o.invoiceID)}</td>
-//       <td>${o.table || '-'} <small style="color:var(--muted);font-size:11px;">${o.orderType||''}</small></td>
-//       <td style="font-size:12.5px;color:var(--muted)">${fdt(o.time)}</td>
-//       <td>${pbadge(o.paymentMethod)}</td>
-//       <td class="amt-g">$${parseFloat(o.totalUSD||0).toFixed(2)}</td>
-//     </tr>`).join('');
-// }
-
-//  function openDeleted(invoiceID){
-
-//     // open New order page and send invoiceID
-//     window.location.href =
-//     "/StartOrder/New.html?deleted=" + invoiceID;
-
-// }
-
-// /* ── RENDER DELETED ─────────────────── */
-// // function rDel() {
-// //   const data = getDel();
-// //   const cnt  = data.length;
-// //   const tot  = data.reduce((s, o) => s + parseFloat(o.total || o.totalUSD || 0), 0);
-// //   document.getElementById('dc').textContent = cnt;
-// //   document.getElementById('da').textContent = '$' + tot.toFixed(2);
-// //   document.getElementById('pd').textContent = cnt;
-
-// //   const tb = document.getElementById('db');
-// //   if (!cnt) { tb.innerHTML = emptyRow(5, 'No deleted transactions'); return; }
-// //   // tb.innerHTML = data.map(o => `
-// //   //   <tr data-q="${fid(o.id||o.invoiceID)} ${(o.table||'').toLowerCase()}">
-// //   //     <td class="mono">${fid(o.id || o.invoiceID)}</td>
-// //   //     <td>${o.table || '-'}</td>
-// //   //     <td style="font-size:12.5px;color:var(--muted)">${fdt(o.time)}</td>
-// //   //     <td><span class="badge bd">Cancelled</span></td>
-// //   //     <td class="amt-r">$${parseFloat(o.total||o.totalUSD||0).toFixed(2)}</td>
-// //   //   </tr>`).join('');
-// //   tb.innerHTML = data.map(o => `
-// // <tr onclick="openDeleted('${o.invoiceID}')"
-// // data-q="${fid(o.id||o.invoiceID)} ${(o.table||'').toLowerCase()}">
-
-// // <td class="mono">${fid(o.id || o.invoiceID)}</td>
-// // <td>${o.table || '-'}</td>
-// // <td style="font-size:12.5px;color:var(--muted)">${fdt(o.time)}</td>
-// // <td><span class="badge bd">Cancelled</span></td>
-// // <td class="amt-r">$${parseFloat(o.total||o.totalUSD||0).toFixed(2)}</td>
-
-// // </tr>`).join('');
-// // }
-// async function rDel() {
-
-//   const data = await getDel();
-
-//   const cnt  = data.length;
-//   const tot  = data.reduce((s, o) => s + parseFloat(o.totalUSD || 0), 0);
-
-//   document.getElementById('dc').textContent = cnt;
-//   document.getElementById('da').textContent = '$' + tot.toFixed(2);
-//   document.getElementById('pd').textContent = cnt;
-
-//   const tb = document.getElementById('db');
-
-//   if (!cnt) {
-//     tb.innerHTML = emptyRow(5, 'No deleted transactions');
-//     return;
-//   }
-
-//   tb.innerHTML = data.map(o => `
-// <tr onclick="openDeleted('${o.invoiceID}')">
-// <td class="mono">${fid(o.invoiceID)}</td>
-// <td>${o.table || '-'}</td>
-// <td>${fdt(o.time)}</td>
-// <td><span class="badge bd">Cancelled</span></td>
-// <td class="amt-r">$${parseFloat(o.totalUSD||0).toFixed(2)}</td>
-// </tr>`).join('');
-// }
-
-// /* ── EXPORT PREVIEW ─────────────────── */
-// // function getFiltered() {
-// //   const s = document.getElementById('ds').value;
-// //   const e = document.getElementById('de').value;
-// //   return getPaid().filter(o => {
-// //     if (!s && !e) return true;
-// //     const ds = new Date(o.time).toISOString().split('T')[0];
-// //     if (s && ds < s) return false;
-// //     if (e && ds > e) return false;
-// //     return true;
-// //   });
-// // }
-// async function getFiltered() {
-
-//   const data = await getPaid();
-
-//   const sd = document.getElementById('ds').value;
-//   const ed = document.getElementById('de').value;
-//   const st = document.getElementById('ts').value || "00:00";
-//   const et = document.getElementById('te').value || "23:59";
-
-//   const start = sd ? new Date(sd + "T" + st) : null;
-//   const end   = ed ? new Date(ed + "T" + et) : null;
-
-//   return data.filter(o => {
-
-//     const t = new Date(o.time);
-
-//     if (start && t < start) return false;
-//     if (end && t > end) return false;
-
-//     return true;
-//   });
-
-// }
-// async function rp() { 
-//   const rows = await getFiltered();
-//   // const allP = getPaid(), allD = getDel();
-//   const allP = await getPaid();
-//   const allD = await getDel();
-//   const fsum = rows.reduce((s, o) => s + parseFloat(o.totalUSD || 0), 0);
-//   document.getElementById('etp').textContent = '$' + allP.reduce((s,o)=>s+parseFloat(o.totalUSD||0),0).toFixed(2);
-//   document.getElementById('etc').textContent = allP.length;
-//   document.getElementById('efa').textContent = '$' + fsum.toFixed(2);
-//   document.getElementById('ede').textContent = allD.length;
-
-//   const tb = document.getElementById('xb');
-//   if (!rows.length) {
-//     tb.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--muted);font-style:italic;">No records in selected range</td></tr>`;
-//     return;
-//   }
-//   // tb.innerHTML = rows.map(o => `
-//   //     <tr>
-//   //     <td class="mono"> 
-//   //     <a href="../NewOrder/New.html?deleted=${o.invoiceID}" style="color:inherit;text-decoration:underline;">
-//   //     ${fid(o.id || o.invoiceID)}
-//   //     </a>
-//   //     </td>
-//   //     <td>${o.table || '-'}</td>
-//   //     <td style="font-size:12.5px;color:var(--muted)">${fdt(o.time)}</td>
-//   //     <td>${pbadge(o.paymentMethod)}</td>
-//   //     <td class="amt-g">$${parseFloat(o.totalUSD||0).toFixed(2)}</td>
-//   //   </tr>`).join('');
-
-// tb.innerHTML = rows.map(o => `
-// <tr>
-// <td class="mono">
-// <a href="/StartOrder/New.html?deleted=${o.invoiceID}">
-// ${fid(o.invoiceID)}
-// </a>
-// </td>
-// <td>${o.table || '-'}</td>
-// <td>${fdt(o.time)}</td>
-// <td>${pbadge(o.paymentMethod)}</td>
-// <td class="amt-g">$${parseFloat(o.totalUSD||0).toFixed(2)}</td>
-// </tr>
-// `).join('');
-
-
-// //   tb.innerHTML = data.map(o => `
-// // <tr data-q="${fid(o.id||o.invoiceID)} ${(o.table||'').toLowerCase()}">
-// // <td class="mono">
-// // <a href="../NewOrder/New.html?deleted=${o.invoiceID}" 
-// // style="color:inherit;text-decoration:underline;">
-// // ${fid(o.id || o.invoiceID)}
-// // </a>
-// // </td>
-// // <td>${o.table || '-'}</td>
-// // <td style="font-size:12.5px;color:var(--muted)">${fdt(o.time)}</td>
-// // <td><span class="badge bd">Cancelled</span></td>
-// // <td class="amt-r">$${parseFloat(o.total||o.totalUSD||0).toFixed(2)}</td>
-// // </tr>`).join('');
-// }
-
-// /* ── EXPORT XLSX ────────────────────── */
-// function doExport() {
-//   const rows = getFiltered();
-//   if (!rows.length) { alert('No records to export in selected range.'); return; }
-//   const s1 = rows.map((o, i) => ({
-//     'No': i+1, 'Invoice ID': fid(o.invoiceID), 'Table': o.table||'-',
-//     'Order Type': o.orderType||'Dine in', 'Date/Time': fdt(o.time),
-//     'Payment Method': o.paymentMethod||'Cash', 'Amount (USD)': parseFloat(o.totalUSD||0).toFixed(2)
-//   }));
-//   const wb = XLSX.utils.book_new();
-//   const ws1 = XLSX.utils.json_to_sheet(s1);
-//   ws1['!cols'] = [{wch:4},{wch:13},{wch:12},{wch:14},{wch:22},{wch:16},{wch:13}];
-//   XLSX.utils.book_append_sheet(wb, ws1, 'Transaction Paid');
-//   const del = getDel();
-//   if (del.length) {
-//     const s2 = del.map((o,i) => ({
-//       'No': i+1, 'Invoice ID': fid(o.id||o.invoiceID), 'Table': o.table||'-',
-//       'Date/Time': fdt(o.time), 'Amount': parseFloat(o.total||o.totalUSD||0).toFixed(2), 'Status':'Cancelled'
-//     }));
-//     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(s2), 'Transaction Deleted');
-//   }
-//   const s = document.getElementById('ds').value || 'all';
-//   const e = document.getElementById('de').value || 'today';
-//   XLSX.writeFile(wb, `CoffeeShop_${s}_to_${e}.xlsx`);
-// }
-
-
-// /* ── SEARCH ─────────────────────────── */
-// function filt(tbId, q) {
-//   q = q.toLowerCase().trim();
-//   document.querySelectorAll(`#${tbId} tr[data-q]`).forEach(r => {
-//     r.style.display = (r.dataset.q + r.innerText.toLowerCase()).includes(q) ? '' : 'none';
-//   });
-// }
-
-// /* ── PAGE SWITCH ────────────────────── */
-// function show(name) {
-//   ['paid','deleted','export'].forEach(p => {
-//     document.getElementById('pg-'+p).classList.toggle('show', p === name);
-//     const nb = document.getElementById('nb-'+p);
-//     nb.classList.remove('on', 'on-r');
-//     if (p === name) {
-//       if (name === 'deleted') nb.classList.add('on-r');
-//       else nb.classList.add('on');
-//     }
-//   });
-// }
-
-// /* ── ABSORB NEW RECEIPT ─────────────── */
-// function absorbReceipt() {
-//   const raw = localStorage.getItem('receiptData');
-//   if (!raw) return;
-//   const d = JSON.parse(raw);
-//   if (!d || !d.invoiceID) return;
-//   let h = JSON.parse(localStorage.getItem('receiptHistory') || '[]');
-//   if (!h.find(x => String(x.invoiceID) === String(d.invoiceID))) {
-//     h.unshift(d);
-//     localStorage.setItem('receiptHistory', JSON.stringify(h));
-//   }
-// }
-
-// /* ── INIT ───────────────────────────── */
-// absorbReceipt();
-// rPaid();
-// rDel();
-// const today = new Date();
-// const ago   = new Date(); ago.setDate(today.getDate() - 30);
-// document.getElementById('de').value = today.toISOString().split('T')[0];
-// document.getElementById('ds').value = ago.toISOString().split('T')[0];
-// rp();
-
-
-/* ══════════════════════════════════════════════════
-   DATA  —  all from MySQL via server.js
-══════════════════════════════════════════════════ */
-// async function fetchAll() {
-//     const res = await fetch("http://localhost:3000/api/transactions");
-//     return await res.json();
-// }
 
 async function fetchAll() {
     const res = await fetch("http://localhost:3000/api/transactions/export");// for export all data in db
@@ -342,23 +21,36 @@ function isToday(timeStr) {
     } catch { return false; }
 }
 
+// async function getPaidToday() {
+//     const all = await fetchAll();
+//     return all.filter(o => o.status === 'PAID' && isToday(o.time));
+// }
+
+//Today's open shift only (for Transaction Paid / Deleted tabs)
 async function getPaidToday() {
-    const all = await fetchAll();
-    return all.filter(o => o.status === 'PAID' && isToday(o.time));
+    const res = await fetch("http://localhost:3000/api/transactions");
+    const all = await res.json();
+    return all.filter(o => o.status === 'PAID');
 }
 
+// async function getDelToday() {
+//     const all = await fetchAll();
+//     return all.filter(o => o.status === 'DELETED' && isToday(o.time));
+// }
 async function getDelToday() {
-    const all = await fetchAll();
-    return all.filter(o => o.status === 'DELETED' && isToday(o.time));
+    const res = await fetch("http://localhost:3000/api/transactions");
+    const all = await res.json();
+    return all.filter(o => o.status === 'DELETED');
 }
 
+// All history (for Export Sale tab) 
 async function getAllPaid() {
-    const all = await fetchAll();
+    const all = await fetchAll(); // // uses /api/transactions/export
     return all.filter(o => o.status === 'PAID');
 }
 
 async function getAllDel() {
-    const all = await fetchAll();
+    const all = await fetchAll(); //// uses /api/transactions/export
     return all.filter(o => o.status === 'DELETED');
 }
 
@@ -412,18 +104,33 @@ async function rPaid() {
     const tb = document.getElementById('pb');
     if (!cnt) { tb.innerHTML = emptyRow(5, 'No paid transactions today'); return; }
 
+
     tb.innerHTML = data.map(o => `
-        <tr data-q="${fid(o.invoiceID)} ${(o.table||'').toLowerCase()}"
-            onclick="openPaid('${o.invoiceID}')"
-            style="cursor:pointer;">
-            <td class="mono">${fid(o.invoiceID)}</td>
-            <td>${o.table || '-'}
-                <small style="color:var(--muted);font-size:11px;">${o.orderType || ''}</small>
-            </td>
-            <td style="font-size:12.5px;color:var(--muted)">${fdt(o.time)}</td>
-            <td>${pbadge(o.paymentMethod)}</td>
-            <td class="amt-g">$${parseFloat(o.totalUSD || 0).toFixed(2)}</td>
-        </tr>`).join('');
+    <tr data-q="${fid(o.invoiceID)} ${(o.table||'').toLowerCase()}"
+        onclick="openPaid('${o.invoiceID}')"
+        style="cursor:pointer;">
+        <td class="mono">${fid(o.invoiceID)}</td>
+        <td>${o.table || '-'}
+            <small style="color:var(--muted);font-size:11px;">${o.orderType || ''}</small>
+        </td>
+        <td style="font-size:12.5px;color:var(--muted)">${fdt(o.time)}</td>
+        <td>${pbadge(o.paymentMethod)}</td>
+        <td class="amt-g">$${parseFloat(o.totalUSD || 0).toFixed(2)}</td>
+    </tr>`).join('');
+    
+}
+
+function selectReturnRow(row, invoiceID) {
+    // deselect all
+    document.querySelectorAll('#pb tr.selected-return-row').forEach(r => {
+        r.classList.remove('selected-return-row');
+        r.style.background = '';
+        r.style.outline = '';
+    });
+    // select this one
+    row.classList.add('selected-return-row');
+    row.style.background = '#fff8e1';
+    row.style.outline = '2px solid #f39c12';
 }
 
 function openPaid(invoiceID) {
@@ -814,7 +521,7 @@ async function doExport() {
     }
 
     // ── Save file ────────────────────────────────────
-    const filename = `Khamo Coffee_${sd || 'all'}_${st.replace(':','')}__${ed || 'today'}_${et.replace(':','')}.xlsx`;
+    const filename = `CoffeeShop_${sd || 'all'}_${st.replace(':','')}__${ed || 'today'}_${et.replace(':','')}.xlsx`;
     XLSX.writeFile(wb, filename);
 }
 

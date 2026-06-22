@@ -1,9 +1,43 @@
-
 .contener{
+    justify-content: center;
     display: flex;
+    align-items: center;
+}
+
+.selectdate{
+    justify-content:center;
+    align-items: center;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    background-color:purple;
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    height: clamp(300px, 50vh, 600px);
+    width: 80%;
+}
+.selectdate input{
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+    border:none;
+}
+.selectdate button{
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 100px;
+    border:none;
+    background-color: white;
+    color: purple;
+    font-weight: bold;
+    cursor: pointer;
+}
+#result{
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color:rgba(200, 166, 231, 0.782);
-    border-radius: 20px;
+    display: flex;
+    margin-top: 20px;
 }

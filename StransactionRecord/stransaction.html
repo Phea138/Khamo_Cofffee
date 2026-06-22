@@ -8,6 +8,7 @@
 <!-- xlsx with cell styling support -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 <link rel="stylesheet" href="transactionStyle.css">
+<script src="js/main.js?v=2"></script>
 </head>
 <body>
 
@@ -16,7 +17,7 @@
   <div class="sb-top">
     <a class="back-btn" href="/Khamo POS/POS_SYSTEM/StartOrder/New.html">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
       Back
     </a>
@@ -74,8 +75,8 @@
         <input type="text" placeholder="Enter Invoice ID…" oninput="filt('pb',this.value)">
         <button>
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
-            <circle cx="11" cy="11" r="6"/>
-            <path stroke-linecap="round" d="M21 21l-3.5-3.5"/>
+            <circle cx="11" cy="11" r="6" />
+            <path stroke-linecap="round" d="M21 21l-3.5-3.5" />
           </svg>
         </button>
       </div>
@@ -124,8 +125,8 @@
         <input type="text" placeholder="Enter Invoice ID…" oninput="filt('db',this.value)">
         <button>
           <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
-            <circle cx="11" cy="11" r="6"/>
-            <path stroke-linecap="round" d="M21 21l-3.5-3.5"/>
+            <circle cx="11" cy="11" r="6" />
+            <path stroke-linecap="round" d="M21 21l-3.5-3.5" />
           </svg>
         </button>
       </div>
@@ -194,7 +195,7 @@
           <button class="exp-btn" onclick="doExport()">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round"
-                d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
             </svg>
             Export as Excel
           </button>
@@ -229,6 +230,7 @@
   </div>
 
 </main>
+
 
 <script src="/Khamo POS/POS_SYSTEM/StransactionRecord/stransaction.js"></script>
 </body>
